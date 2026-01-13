@@ -1,93 +1,118 @@
-index.html
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meu primeiro site</title>
+  <title>Site do Lucas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fonte profissional -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    body{
-      margin:0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: #e2e8f0;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
       min-height: 100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 24px;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+      padding: 20px;
     }
-    .card{
-      max-width: 720px;
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 520px;
       width: 100%;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: 0 18px 50px rgba(0,0,0,0.35);
-      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      text-align: center;
     }
-    h1{
-      margin: 0 0 10px 0;
-      font-size: 34px;
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
       letter-spacing: 0.5px;
     }
-    p{
-      margin: 0 0 18px 0;
+
+    p {
+      font-size: 1rem;
       line-height: 1.6;
-      color: #cbd5e1;
-      font-size: 16px;
+      color: #d1d5db;
+      margin-bottom: 24px;
     }
-    .badges{
-      display:flex;
-      gap:10px;
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
       flex-wrap: wrap;
-      margin: 14px 0 22px;
+      margin-bottom: 24px;
     }
-    .badge{
-      font-size: 12px;
-      padding: 8px 10px;
+
+    .badge {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      padding: 6px 12px;
       border-radius: 999px;
-      background: rgba(56,189,248,0.14);
-      border: 1px solid rgba(56,189,248,0.30);
-      color: #7dd3fc;
+      font-size: 0.75rem;
+      border: 1px solid rgba(59, 130, 246, 0.3);
     }
-    .actions{
-      display:flex;
-      gap:12px;
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
       flex-wrap: wrap;
-      margin-top: 10px;
+      margin-bottom: 20px;
     }
-    .btn{
-      cursor:pointer;
+
+    button {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      padding: 10px 18px;
+      border-radius: 10px;
       border: none;
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-weight: 700;
-      font-size: 14px;
-      transition: transform .08s ease, opacity .08s ease;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .btn:active{ transform: scale(0.98); }
-    .primary{
-      background: #38bdf8;
-      color: #082f49;
+
+    .btn-primary {
+      background: #3b82f6;
+      color: #fff;
     }
-    .ghost{
-      background: rgba(255,255,255,0.08);
-      color: #e2e8f0;
-      border: 1px solid rgba(255,255,255,0.18);
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
     }
-    .footer{
-      margin-top: 18px;
-      font-size: 12px;
-      color: rgba(226,232,240,0.7);
+
+    .btn-ghost {
+      background: transparent;
+      color: #93c5fd;
+      border: 1px solid rgba(147, 197, 253, 0.4);
     }
-    code{
-      background: rgba(0,0,0,0.25);
-      padding: 2px 6px;
-      border-radius: 6px;
+
+    .btn-ghost:hover {
+      background: rgba(147, 197, 253, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .footer {
+      font-size: 0.75rem;
+      color: #9ca3af;
     }
   </style>
 </head>
@@ -95,29 +120,33 @@ index.html
 <body>
   <main class="card">
     <h1>AGORA SIM! 🚀</h1>
+
     <p>
-      Este é meu primeiro site, criado do zero. Agora ele já tem estilo, centralização
-      e um visual moderno.
+      Este é meu primeiro site, criado do zero. Agora ele já tem estilo,
+      centralização e um visual moderno e profissional.
     </p>
 
     <div class="badges">
       <span class="badge">HTML</span>
       <span class="badge">CSS</span>
-      <span class="badge">Local: <code>file:///</code></span>
+      <span class="badge">GitHub Pages</span>
+      <span class="badge">HTTPS</span>
     </div>
 
     <div class="actions">
-      <button class="btn primary" onclick="alert('Você clicou! Seu site já tem interação 😄')">
+      <button class="btn-primary"
+        onclick="alert('Você clicou! Seu site já tem interação 😄')">
         Testar botão
       </button>
 
-      <button class="btn ghost" onclick="document.title='Site do Lucas ✅'">
+      <button class="btn-ghost"
+        onclick="document.title = 'Site do Lucas ✅'">
         Mudar título da aba
       </button>
     </div>
 
     <div class="footer">
-      Dica: sempre que editar, faça <b>Ctrl + S</b> e depois atualize o navegador com <b>F5</b>.
+      Dica: sempre que editar, salve e atualize o navegador com F5.
     </div>
   </main>
 </body>
