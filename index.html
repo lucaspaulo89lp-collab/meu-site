@@ -3,403 +3,417 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#0b3a5a" />
-  <title>Instituto de Estética & Bem-Estar | Avaliação e Procedimentos</title>
-  <meta name="description" content="Clínica de estética com atendimento humanizado, segurança e resultados naturais. Agende sua avaliação pelo WhatsApp." />
+  <meta name="theme-color" content="#0b1224" />
+  <title>PlayTiger Entertainment | Plataforma de Entretenimento Digital</title>
+  <meta name="description" content="Plataforma de entretenimento digital com experiência moderna, regras claras e foco em jogo responsável. +18. Sem promessas de ganho." />
+  <meta name="robots" content="index,follow" />
 
+  <!-- Fonte premium (pode manter) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#f6f8fb;
-      --card:#ffffff;
-      --text:#0f172a;
-      --muted:#475569;
-      --line:#e5e7eb;
-      --brand:#0b3a5a;     /* azul-clínica */
-      --brand2:#0ea5a4;    /* verde-água premium */
-      --accent:#22c55e;    /* WhatsApp / sucesso */
-      --shadow: 0 18px 40px rgba(2,6,23,.10);
-      --radius: 18px;
+      --bg1:#070b16;
+      --bg2:#0a1531;
+      --card: rgba(255,255,255,.07);
+      --card2: rgba(255,255,255,.05);
+      --stroke: rgba(255,255,255,.14);
+      --text:#e8eefc;
+      --muted:#a8b5d6;
+
+      --brand:#56d0ff;
+      --brand2:#36d399;
+      --warn:#fbbf24;
+
+      --shadow: 0 24px 60px rgba(0,0,0,.45);
+      --r: 22px;
+      --r2: 16px;
       --max: 1120px;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(900px 450px at 15% 10%, rgba(14,165,164,.12), transparent 60%),
-        radial-gradient(900px 450px at 85% 0%, rgba(11,58,90,.10), transparent 55%),
-        var(--bg);
       color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(86,208,255,.18), transparent 60%),
+        radial-gradient(900px 600px at 80% 20%, rgba(54,211,153,.12), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
     }
-
     a{color:inherit;text-decoration:none}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 20px;}
 
-    /* Topbar */
+    /* TOPBAR */
     .topbar{
       position:sticky; top:0; z-index:50;
-      background: rgba(246,248,251,.78);
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid var(--line);
+      backdrop-filter: blur(12px);
+      background: rgba(7,11,22,.60);
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
-    .topbar .inner{
-      display:flex; align-items:center; justify-content:space-between; gap:14px;
-      padding:14px 0;
+    .topbar .in{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 14px 0;
     }
     .brand{
       display:flex; align-items:center; gap:10px;
-      font-weight:800; letter-spacing:-.2px;
+      font-weight: 900; letter-spacing: .2px;
     }
     .logo{
-      width:38px;height:38px;border-radius:14px;
+      width: 38px; height:38px; border-radius: 16px;
       background: linear-gradient(135deg, var(--brand), var(--brand2));
-      box-shadow: 0 10px 18px rgba(11,58,90,.18);
+      box-shadow: 0 16px 30px rgba(86,208,255,.18);
     }
-    .nav{
-      display:flex; gap:10px; align-items:center;
-      font-weight:700; font-size:14px; color:var(--muted);
-    }
-    .nav a{
-      padding:10px 12px; border-radius:12px;
-      transition:.2s ease;
-    }
-    .nav a:hover{background:#fff; box-shadow: 0 10px 18px rgba(2,6,23,.06); color:var(--text);}
-    .top-cta{
-      display:flex; gap:10px; align-items:center;
+    .brand small{
+      display:block;
+      color: rgba(232,238,252,.70);
+      font-weight: 700;
+      letter-spacing: 0;
+      font-size: 12.5px;
+      margin-top: 2px;
     }
 
-    /* Buttons */
-    .btn{
-      border:1px solid var(--line);
-      background:#fff;
-      padding:11px 14px;
-      border-radius:14px;
-      font-weight:800;
-      display:inline-flex; align-items:center; gap:10px;
-      cursor:pointer;
-      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-      box-shadow: 0 10px 18px rgba(2,6,23,.05);
-    }
-    .btn:hover{transform:translateY(-2px); box-shadow: 0 16px 26px rgba(2,6,23,.10);}
-    .btn.primary{
-      border-color: transparent;
-      background: linear-gradient(135deg, var(--brand), var(--brand2));
-      color:#fff;
-      box-shadow: 0 16px 30px rgba(11,58,90,.18);
-    }
-    .btn.primary:hover{box-shadow: 0 22px 38px rgba(11,58,90,.22);}
-    .btn.soft{
-      background: #fff;
-      color: var(--text);
+    .nav{display:flex; gap:10px; align-items:center; color:var(--muted); font-weight:800; font-size:14px;}
+    .nav a{padding:8px 10px; border-radius: 12px; transition:.2s ease;}
+    .nav a:hover{background: rgba(255,255,255,.06); color:var(--text);}
+
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(232,238,252,.78);
+      font-weight: 900;
+      font-size: 12.5px;
+      white-space: nowrap;
     }
 
-    /* Hero */
-    header{padding:34px 0 10px;}
+    /* CARDS */
+    .card{
+      border-radius: var(--r);
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    /* HERO */
+    header{padding: 28px 0 14px;}
     .hero{
       display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:16px;
+      grid-template-columns: 1.2fr .9fr;
+      gap: 16px;
       align-items:stretch;
     }
-    .card{
-      background: var(--card);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+    .hero-main{padding: 30px; position: relative; overflow:hidden;}
+    .hero-main:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(520px 320px at 25% 20%, rgba(86,208,255,.18), transparent 60%),
+        radial-gradient(480px 280px at 80% 15%, rgba(54,211,153,.14), transparent 60%);
+      pointer-events:none;
     }
-    .hero-main{padding:28px;}
-    .kicker{
-      display:flex; gap:8px; flex-wrap:wrap;
-      color: var(--muted);
-      font-weight:700;
-      font-size:13px;
-      margin-bottom:12px;
-    }
-    .pill{
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
-    }
+    .hero-main > *{position:relative;}
 
     h1{
-      margin:0 0 10px;
-      font-size: clamp(30px, 4vw, 44px);
-      line-height:1.08;
-      letter-spacing:-.9px;
+      margin: 0 0 10px;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.06;
+      letter-spacing: -0.9px;
     }
     .hl{
-      background: linear-gradient(90deg, var(--brand), var(--brand2));
-      -webkit-background-clip:text;
+      background: linear-gradient(135deg, var(--brand2), var(--brand));
+      -webkit-background-clip: text;
       background-clip:text;
       color: transparent;
     }
     .sub{
-      margin:0 0 18px;
+      margin: 0 0 16px;
       color: var(--muted);
       font-size: 15.5px;
-      line-height:1.65;
-      max-width: 64ch;
+      line-height: 1.65;
+      max-width: 68ch;
     }
-    .hero-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
-    .note{
-      margin-top:14px;
-      font-size:13px;
-      color: var(--muted);
-      padding:12px 14px;
-      background: #f8fafc;
-      border:1px solid var(--line);
-      border-radius:14px;
+    .badges{display:flex; flex-wrap:wrap; gap:8px; margin: 14px 0 14px;}
+    .badge{
+      padding: 8px 10px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      font-weight: 900; font-size: 12.5px;
+      color: rgba(232,238,252,.92);
     }
+    .badge.warn{border-color: rgba(251,191,36,.28); background: rgba(251,191,36,.10); color: rgba(251,191,36,.95);}
+    .badge.ok{border-color: rgba(54,211,153,.28); background: rgba(54,211,153,.10); color: rgba(54,211,153,.95);}
 
-    .hero-side{padding:18px;}
-    .hero-side h3{margin:0 0 10px; font-size:15px; letter-spacing:-.2px;}
-    .list{display:grid; gap:10px;}
-    .li{
-      display:grid; grid-template-columns: 34px 1fr; gap:10px;
-      padding:12px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:#fff;
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px;}
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: 900;
+      display:inline-flex; align-items:center; gap:10px;
+      cursor:pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-2px); box-shadow: 0 18px 36px rgba(0,0,0,.35); background: rgba(255,255,255,.08);}
+    .btn.primary{
+      border-color: transparent;
+      background: linear-gradient(135deg, rgba(86,208,255,.95), rgba(54,211,153,.90));
+      color:#06111f;
+    }
+    .btn.primary:hover{filter: brightness(1.02);}
+
+    .fineprint{
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: rgba(232,238,252,.85);
+      font-size: 12.8px;
+      line-height: 1.55;
+    }
+    .fineprint b{color:#fff}
+
+    /* SIDE */
+    .side{padding: 18px; display:flex; flex-direction:column; gap: 10px;}
+    .side h3{margin:0; font-size: 15px; letter-spacing:.2px;}
+    .item{
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      display:grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
     }
     .ic{
-      width:34px;height:34px;border-radius:14px;
+      width: 34px; height: 34px; border-radius: 14px;
       display:grid; place-items:center;
-      background: rgba(14,165,164,.10);
-      color: var(--brand);
-      font-weight:900;
+      background: rgba(86,208,255,.10);
+      border: 1px solid rgba(86,208,255,.18);
+      font-weight: 900;
     }
-    .li b{font-size:13.5px}
-    .li span{display:block; color:var(--muted); font-size:13px; line-height:1.45; margin-top:2px}
+    .item b{display:block; font-size: 13.5px;}
+    .item span{display:block; margin-top: 2px; color: var(--muted); font-size: 13px; line-height: 1.45;}
 
-    /* Sections */
-    section{padding:22px 0;}
-    .sec-title{
-      display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
-      margin-bottom:12px;
+    /* SECTIONS */
+    section{padding: 22px 0;}
+    .title{
+      display:flex; align-items:flex-end; justify-content:space-between; gap: 12px;
+      margin-bottom: 12px;
     }
-    .sec-title h2{margin:0; font-size:20px; letter-spacing:-.4px;}
-    .sec-title p{margin:0; color:var(--muted); font-weight:700; font-size:13px;}
+    .title h2{margin:0; font-size: 20px; letter-spacing:-.4px;}
+    .title p{margin:0; color: rgba(232,238,252,.70); font-weight:900; font-size: 13px;}
 
-    .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
-    .grid2{display:grid; grid-template-columns:repeat(2,1fr); gap:12px;}
+    .grid3{display:grid; grid-template-columns: repeat(3,1fr); gap: 12px;}
+    .grid2{display:grid; grid-template-columns: 1fr 1fr; gap: 12px;}
 
-    .mini-card{
-      padding:16px;
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background:#fff;
-      box-shadow: 0 12px 22px rgba(2,6,23,.06);
-      transition: transform .15s ease, box-shadow .15s ease;
+    .mini{
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
     }
-    .mini-card:hover{transform:translateY(-3px); box-shadow: 0 18px 30px rgba(2,6,23,.10);}
-    .mini-card b{display:block; margin-bottom:6px;}
-    .mini-card p{margin:0; color:var(--muted); font-size:13.5px; line-height:1.55;}
+    .mini:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 18px 36px rgba(0,0,0,.30);
+      background: rgba(255,255,255,.06);
+    }
+    .mini b{display:flex; gap:8px; align-items:center; font-weight:900;}
+    .mini p{margin: 8px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.6;}
 
-    /* Procedures */
-    .proc{
-      padding:18px;
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background:#fff;
-      box-shadow: 0 12px 22px rgba(2,6,23,.06);
+    /* TRUST / COMPLIANCE BLOCK */
+    .trust{
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      color: rgba(232,238,252,.86);
+      font-size: 13px;
+      line-height: 1.6;
     }
-    .proc h3{margin:0 0 6px; font-size:15px;}
-    .proc p{margin:0; color:var(--muted); font-size:13.5px; line-height:1.55;}
-    .proc .tag{
-      display:inline-flex; margin-top:10px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#f8fafc;
-      color: var(--muted);
-      font-weight:800;
-      font-size:12px;
-    }
-
-    /* CTA Final */
-    .cta{
-      padding:18px;
-      border-radius: var(--radius);
-      border:1px solid rgba(14,165,164,.25);
-      background:
-        radial-gradient(900px 240px at 20% 20%, rgba(14,165,164,.14), transparent 70%),
-        radial-gradient(900px 240px at 90% 10%, rgba(11,58,90,.12), transparent 70%),
-        #fff;
-      box-shadow: var(--shadow);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-    .cta h2{margin:0; font-size:20px;}
-    .cta p{margin:6px 0 0; color:var(--muted); font-weight:700; font-size:13.5px; line-height:1.5; max-width:68ch;}
+    .trust b{color:#fff}
 
     /* FAQ */
     details{
-      border:1px solid var(--line);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
       border-radius: 16px;
-      background:#fff;
-      padding:14px;
-      box-shadow: 0 10px 18px rgba(2,6,23,.05);
+      padding: 12px 14px;
+      transition: background .15s ease, border-color .15s ease;
     }
-    summary{
-      cursor:pointer;
-      font-weight:900;
-      list-style:none;
-    }
+    details:hover{background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.14);}
+    summary{cursor:pointer; font-weight: 900; list-style:none;}
     summary::-webkit-details-marker{display:none}
-    details p{margin:10px 0 0; color:var(--muted); font-size:13.5px; line-height:1.6;}
+    details p{margin:10px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.6;}
 
-    /* Footer */
+    /* CTA FINAL */
+    .cta{
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(86,208,255,.18);
+      background:
+        radial-gradient(900px 240px at 20% 20%, rgba(86,208,255,.14), transparent 70%),
+        radial-gradient(900px 240px at 85% 10%, rgba(54,211,153,.10), transparent 70%),
+        rgba(255,255,255,.05);
+      box-shadow: var(--shadow);
+      display:flex; align-items:center; justify-content:space-between; gap: 12px; flex-wrap:wrap;
+    }
+    .cta h2{margin:0; font-size: 20px;}
+    .cta p{margin:6px 0 0; color: rgba(232,238,252,.72); font-weight:900; font-size: 13.5px; line-height: 1.5; max-width: 72ch;}
+
     footer{
-      padding: 22px 0 40px;
-      color: var(--muted);
-      font-size: 13px;
+      padding: 16px 0 30px;
+      color: rgba(232,238,252,.65);
+      font-size: 12.8px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      margin-top: 18px;
     }
-    .foot{
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      border-top:1px solid var(--line);
-      padding-top:16px;
-    }
+    .foot{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; padding-top: 14px;}
 
-    /* WhatsApp Float */
-    .wa{
-      position:fixed;
+    /* FLOAT SUPPORT */
+    .float{
+      position: fixed;
       right: 18px;
       bottom: 18px;
-      width:58px;height:58px;
+      width: 58px; height: 58px;
       border-radius: 999px;
       display:grid; place-items:center;
       background: linear-gradient(135deg, #25D366, #16a34a);
-      box-shadow: 0 18px 30px rgba(2,6,23,.18);
-      border:1px solid rgba(255,255,255,.35);
-      z-index:999;
-      transition: transform .15s ease;
+      box-shadow: 0 20px 35px rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.18);
+      z-index: 9999;
+      transition: transform .15s ease, filter .15s ease;
     }
-    .wa:hover{transform: translateY(-2px);}
-    .wa svg{width:28px;height:28px; fill:#fff;}
-    .wa-tip{
-      position: fixed;
-      right: 86px;
-      bottom: 28px;
-      background:#0f172a;
-      color:#fff;
-      padding:10px 12px;
-      border-radius: 14px;
-      font-weight:800;
-      font-size:13px;
-      box-shadow: 0 18px 30px rgba(2,6,23,.20);
-      opacity:0;
-      transform: translateY(6px);
-      transition:.2s ease;
-      pointer-events:none;
-    }
-    .wa:hover + .wa-tip{opacity:1; transform: translateY(0);}
+    .float:hover{transform: translateY(-2px); filter: brightness(1.02);}
+    .float svg{width:28px;height:28px; fill:#06111f;}
 
-    /* Responsive */
+    /* RESPONSIVE */
     @media (max-width: 980px){
-      .hero{grid-template-columns:1fr}
       .nav{display:none}
+      .hero{grid-template-columns:1fr}
       .grid3,.grid2{grid-template-columns:1fr}
-      .top-cta{width:100%}
+      .pill{display:none}
     }
   </style>
 </head>
 
 <body>
-  <!-- CONFIGURAÇÕES -->
+  <!--
+    ✅ CONFIGURAÇÃO (EDITE SOMENTE AQUI)
+    - mainCtaLink: coloque o link oficial da plataforma (somente se for legal/licenciada).
+    - supportWhats: seu WhatsApp (DDI+DDD+número).
+  -->
   <script>
-    const WHATS_NUMBER = "5592993092695";
-    const WHATS_MSG_DEFAULT = "Olá! Gostaria de agendar uma avaliação na clínica. Pode me informar os horários disponíveis e valores a partir de?";
-    function wa(msg){ return `https://wa.me/${WHATS_NUMBER}?text=${encodeURIComponent(msg)}`; }
+    const CONFIG = {
+      siteName: "PlayTiger Entertainment",
+      tagline: "Plataforma de entretenimento digital",
+      supportWhats: "5592993092695",
+      supportMsg: "Olá! Preciso de suporte e informações sobre a plataforma de entretenimento digital.",
+      mainCtaLink: "#", // <-- COLOQUE AQUI O LINK OFICIAL (se for legal/licenciada)
+      mainCtaText: "Acessar plataforma",
+      regionText: "Brasil",
+    };
+
+    function waLink(msg){
+      if(!CONFIG.supportWhats) return "#";
+      return `https://wa.me/${CONFIG.supportWhats}?text=${encodeURIComponent(msg)}`;
+    }
   </script>
 
   <div class="topbar">
-    <div class="wrap inner">
+    <div class="wrap in">
       <div class="brand">
         <div class="logo" aria-hidden="true"></div>
         <div>
-          Instituto de Estética & Bem-Estar<br>
-          <span style="color:var(--muted); font-weight:700; font-size:13px;">Atendimento humanizado • Segurança • Resultados naturais</span>
+          <div id="siteTitle">PlayTiger Entertainment</div>
+          <small id="siteTagline">Plataforma de entretenimento digital • Brasil</small>
         </div>
       </div>
 
       <nav class="nav">
-        <a href="#beneficios">Benefícios</a>
-        <a href="#procedimentos">Procedimentos</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#responsavel">Jogo responsável</a>
+        <a href="#transparencia">Transparência</a>
         <a href="#faq">Dúvidas</a>
         <a href="#contato">Contato</a>
       </nav>
 
-      <div class="top-cta">
-        <a class="btn primary" id="topBtn" href="#" target="_blank" rel="noopener">💬 Agendar no WhatsApp</a>
-      </div>
+      <div class="pill">+18 • Entretenimento • Sem promessas</div>
     </div>
   </div>
 
   <header>
     <div class="wrap hero">
       <section class="card hero-main">
-        <div class="kicker">
-          <span class="pill">📍 Atendimento por agendamento</span>
-          <span class="pill">🧴 Protocolos personalizados</span>
-          <span class="pill">✨ Foco em autoestima</span>
-        </div>
+        <h1>Entretenimento digital com <span class="hl">experiência moderna</span> e regras claras.</h1>
 
-        <h1>Realce sua beleza com <span class="hl">procedimentos seguros</span> e resultados naturais.</h1>
         <p class="sub">
-          Avaliação completa, orientação clara e atendimento acolhedor. Aqui, o objetivo é elevar sua autoestima com
-          segurança, bom senso estético e protocolos adequados ao seu caso.
+          Este é um ambiente de divulgação de <b>entretenimento digital</b>. Nossa prioridade é transparência,
+          comunicação clara e orientação sobre <b>uso responsável</b>. <b>Não</b> é investimento e <b>não</b> há promessa de ganhos.
         </p>
 
-        <div class="hero-actions">
-          <a class="btn primary" id="ctaHero" href="#" target="_blank" rel="noopener">💬 Agendar avaliação</a>
-          <a class="btn soft" href="#procedimentos">📋 Ver procedimentos</a>
+        <div class="badges">
+          <span class="badge ok">✅ Experiência rápida e intuitiva</span>
+          <span class="badge">📘 Regras claras</span>
+          <span class="badge warn">+18 • Jogue com responsabilidade</span>
+          <span class="badge">🛡️ Transparência em primeiro lugar</span>
         </div>
 
-        <div class="note">
-          ✅ Clique em <b>Agendar avaliação</b> e você já envia uma mensagem pronta para agilizar seu atendimento.
+        <div class="actions">
+          <a class="btn primary" id="btnAcessar" href="#" rel="noopener">🎮 Acessar plataforma</a>
+          <a class="btn" href="#responsavel">📌 Ver orientações</a>
+          <a class="btn" id="btnSuporteTop" href="#" target="_blank" rel="noopener">💬 Suporte</a>
+        </div>
+
+        <div class="fineprint">
+          <b>Aviso:</b> este site não promete “dinheiro fácil”, não garante resultados e não oferece aconselhamento financeiro.
+          Se decidir participar, faça isso com <b>moderação</b>, <b>limites</b> e respeitando as regras/leis aplicáveis.
         </div>
       </section>
 
-      <aside class="card hero-side">
-        <h3>Por que escolher a clínica</h3>
-        <div class="list">
-          <div class="li">
-            <div class="ic">1</div>
-            <div>
-              <b>Avaliação antes de qualquer procedimento</b>
-              <span>Segurança e indicação correta do melhor protocolo.</span>
-            </div>
+      <aside class="card side">
+        <h3>O que você encontra aqui</h3>
+
+        <div class="item">
+          <div class="ic">1</div>
+          <div>
+            <b>Entretenimento</b>
+            <span>Experiências interativas com foco em diversão e usabilidade.</span>
           </div>
-          <div class="li">
-            <div class="ic">2</div>
-            <div>
-              <b>Atendimento humanizado</b>
-              <span>Você entende o processo e sente confiança.</span>
-            </div>
+        </div>
+
+        <div class="item">
+          <div class="ic">2</div>
+          <div>
+            <b>Transparência</b>
+            <span>Orientações claras sobre regras, limites e boas práticas.</span>
           </div>
-          <div class="li">
-            <div class="ic">3</div>
-            <div>
-              <b>Resultados naturais</b>
-              <span>Beleza realçada com equilíbrio e cuidado.</span>
-            </div>
+        </div>
+
+        <div class="item">
+          <div class="ic">3</div>
+          <div>
+            <b>Jogo responsável</b>
+            <span>Recomendações para controle de tempo e gastos de lazer.</span>
           </div>
-          <div class="li">
-            <div class="ic">4</div>
-            <div>
-              <b>WhatsApp direto</b>
-              <span>Agendamento rápido e orientação por mensagem.</span>
-            </div>
+        </div>
+
+        <div class="item">
+          <div class="ic">4</div>
+          <div>
+            <b>Canal de suporte</b>
+            <span>Contato para dúvidas gerais e direcionamento.</span>
           </div>
         </div>
       </aside>
@@ -407,83 +421,114 @@
   </header>
 
   <main>
-    <section id="beneficios">
+    <section id="como-funciona">
       <div class="wrap">
-        <div class="sec-title">
-          <h2>Uma experiência de clínica premium</h2>
-          <p>Clareza, confiança e foco em você.</p>
+        <div class="title">
+          <h2>Como funciona</h2>
+          <p>Simples, claro e sem promessas.</p>
         </div>
 
         <div class="grid3">
-          <div class="mini-card">
-            <b>✅ Mais clareza</b>
-            <p>Você entende o que será feito e por quê, antes de decidir.</p>
+          <div class="mini">
+            <b>🧭 1) Escolha a experiência</b>
+            <p>Acesse a plataforma (quando configurada) e selecione um modo de entretenimento disponível.</p>
           </div>
-          <div class="mini-card">
-            <b>✅ Mais segurança</b>
-            <p>Avaliação e protocolos adequados para reduzir riscos e aumentar confiança.</p>
+          <div class="mini">
+            <b>📘 2) Leia regras e limites</b>
+            <p>Antes de iniciar, entenda regras e limites. Transparência reduz riscos e confusão.</p>
           </div>
-          <div class="mini-card">
-            <b>✅ Mais resultados</b>
-            <p>Plano de cuidado alinhado com seu objetivo: facial, corporal ou ambos.</p>
+          <div class="mini">
+            <b>⏱️ 3) Use com moderação</b>
+            <p>Defina tempo e orçamento de lazer. Se não estiver confortável, pare.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="procedimentos">
+    <section id="responsavel">
       <div class="wrap">
-        <div class="sec-title">
-          <h2>Procedimentos (exemplos)</h2>
-          <p>Você troca por seus serviços reais.</p>
+        <div class="title">
+          <h2>Jogo responsável (+18)</h2>
+          <p>Consciência e segurança sempre.</p>
         </div>
 
         <div class="grid3">
-          <div class="proc">
-            <h3>Limpeza de pele + hidratação</h3>
-            <p>Rotina de cuidado para pele mais uniforme e revitalizada.</p>
-            <span class="tag">Facial</span>
+          <div class="mini">
+            <b>🧠 Controle de tempo</b>
+            <p>Defina um limite de minutos por sessão e faça pausas regulares.</p>
           </div>
-          <div class="proc">
-            <h3>Drenagem / massagens</h3>
-            <p>Bem-estar, relaxamento e protocolos corporais personalizados.</p>
-            <span class="tag">Corporal</span>
+          <div class="mini">
+            <b>💳 Controle de gastos</b>
+            <p>Use apenas dinheiro de lazer. Nunca comprometa contas essenciais.</p>
           </div>
-          <div class="proc">
-            <h3>Protocolos avançados (sob avaliação)</h3>
-            <p>Indicação de acordo com seu objetivo e seu perfil.</p>
-            <span class="tag">Personalizado</span>
+          <div class="mini">
+            <b>🚫 Se virar problema, pare</b>
+            <p>Se afetar sua rotina, interrompa e procure apoio especializado.</p>
           </div>
+        </div>
+
+        <div class="trust" style="margin-top:12px;">
+          <b>Nota:</b> entretenimento pode envolver risco. Não trate como investimento.
+          Caso você seja menor de 18 anos, <b>não</b> utilize.
+        </div>
+      </div>
+    </section>
+
+    <section id="transparencia">
+      <div class="wrap">
+        <div class="title">
+          <h2>Transparência & boas práticas</h2>
+          <p>O que este site é (e o que não é).</p>
+        </div>
+
+        <div class="grid3">
+          <div class="mini">
+            <b>✅ É</b>
+            <p>Divulgação informativa de entretenimento digital com foco em clareza e responsabilidade.</p>
+          </div>
+          <div class="mini">
+            <b>❌ Não é</b>
+            <p>Promessa de renda, “método infalível” ou garantia de resultados financeiros.</p>
+          </div>
+          <div class="mini">
+            <b>🧩 Compromisso</b>
+            <p>Comunicar limites, idade mínima e orientar uso consciente sempre.</p>
+          </div>
+        </div>
+
+        <div class="fineprint" style="margin-top:12px;">
+          <b>Importante:</b> se você divulgar uma plataforma específica, utilize apenas plataformas legalizadas/licenciadas
+          e apresente termos e políticas oficiais. Este site não substitui os canais oficiais.
         </div>
       </div>
     </section>
 
     <section id="faq">
       <div class="wrap">
-        <div class="sec-title">
+        <div class="title">
           <h2>Dúvidas frequentes</h2>
-          <p>Transparência aumenta confiança.</p>
+          <p>Respostas objetivas e diretas.</p>
         </div>
 
         <div class="grid2">
           <details open>
-            <summary>Preciso de avaliação antes?</summary>
-            <p>Sim. A avaliação garante segurança e indica o protocolo ideal para o seu caso.</p>
+            <summary>Isso é investimento?</summary>
+            <p>Não. É entretenimento digital. Não existe garantia de retorno e não deve ser usado como fonte de renda.</p>
           </details>
 
           <details>
-            <summary>Quanto custa?</summary>
-            <p>O valor depende do procedimento e do plano. Pelo WhatsApp você recebe opções e orientações.</p>
+            <summary>Vocês prometem ganho?</summary>
+            <p>Não. Não fazemos promessas. Recomendamos responsabilidade, limites e moderação.</p>
           </details>
 
           <details>
-            <summary>Como funciona o agendamento?</summary>
-            <p>Você chama no WhatsApp e nós confirmamos os horários disponíveis e orientações.</p>
+            <summary>Quem pode acessar?</summary>
+            <p>Apenas maiores de 18 anos, conforme regras e legislação aplicáveis.</p>
           </details>
 
           <details>
-            <summary>Atende facial e corporal?</summary>
-            <p>Sim. Podemos atender facial, corporal ou um plano integrado (de acordo com avaliação).</p>
+            <summary>Como falar com suporte?</summary>
+            <p>Use o botão de suporte/WhatsApp para dúvidas gerais e orientações.</p>
           </details>
         </div>
       </div>
@@ -493,41 +538,58 @@
       <div class="wrap">
         <div class="cta">
           <div>
-            <h2>Agende sua avaliação e tire dúvidas agora</h2>
-            <p>Atendimento por WhatsApp com mensagem pronta para agilizar seu agendamento.</p>
+            <h2>Suporte e informações</h2>
+            <p>Se tiver dúvidas, fale com o suporte. Transparência e responsabilidade sempre.</p>
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <a class="btn primary" id="ctaFinal" href="#" target="_blank" rel="noopener">💬 Agendar no WhatsApp</a>
-            <a class="btn soft" href="#procedimentos">📋 Ver procedimentos</a>
+            <a class="btn primary" id="btnSuporte" href="#" target="_blank" rel="noopener">💬 Falar com suporte</a>
+            <a class="btn" href="#responsavel">📘 Ver jogo responsável</a>
           </div>
         </div>
 
         <footer>
           <div class="foot">
-            <div>© <span id="year"></span> Instituto de Estética & Bem-Estar</div>
-            <div>Contato: WhatsApp (92) 99309-2695</div>
+            <div>© <span id="year"></span> <span id="footName">PlayTiger Entertainment</span></div>
+            <div>+18 • Entretenimento digital • Sem promessas de ganhos</div>
           </div>
         </footer>
       </div>
     </section>
   </main>
 
-  <!-- WhatsApp flutuante -->
-  <a class="wa" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Agendar no WhatsApp">
+  <!-- Botão flutuante de suporte (WhatsApp) -->
+  <a class="float" id="floatBtn" href="#" target="_blank" rel="noopener" aria-label="Suporte no WhatsApp">
     <svg viewBox="0 0 32 32" aria-hidden="true">
       <path d="M16.02 3C8.84 3 3 8.66 3 15.62c0 2.55.78 4.92 2.12 6.9L3.7 29l6.73-1.38c1.89 1.03 4.07 1.62 5.6 1.62 7.18 0 13-5.66 13-12.62C29.03 8.66 23.2 3 16.02 3zm0 23.04c-1.42 0-3.45-.45-5.08-1.55l-.36-.24-3.99.82.85-3.77-.24-.36c-1.11-1.7-1.7-3.45-1.7-5.32 0-5.48 4.7-9.94 10.52-9.94 5.82 0 10.52 4.46 10.52 9.94 0 5.48-4.7 9.94-10.52 9.94z"/>
     </svg>
   </a>
-  <div class="wa-tip">Agendar agora</div>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    const link = wa(WHATS_MSG_DEFAULT);
-    document.getElementById("topBtn").href = link;
-    document.getElementById("ctaHero").href = link;
-    document.getElementById("ctaFinal").href = link;
-    document.getElementById("waFloat").href = link;
+    // Aplicar nome/tagline
+    document.getElementById("siteTitle").textContent = CONFIG.siteName;
+    document.getElementById("footName").textContent = CONFIG.siteName;
+    document.getElementById("siteTagline").textContent = `${CONFIG.tagline} • ${CONFIG.regionText}`;
+
+    // Links de suporte (WhatsApp)
+    const support = waLink(CONFIG.supportMsg);
+    document.getElementById("btnSuporte").href = support;
+    document.getElementById("btnSuporteTop").href = support;
+    document.getElementById("floatBtn").href = support;
+
+    // Botão principal (link oficial)
+    const main = CONFIG.mainCtaLink || "#";
+    const btnAcessar = document.getElementById("btnAcessar");
+    btnAcessar.textContent = `🎮 ${CONFIG.mainCtaText}`;
+    btnAcessar.href = main;
+
+    if(!CONFIG.mainCtaLink || CONFIG.mainCtaLink === "#"){
+      btnAcessar.addEventListener("click", (e)=>{
+        e.preventDefault();
+        alert("Configure o link oficial da plataforma em CONFIG.mainCtaLink (somente se for legal/licenciada).");
+      });
+    }
   </script>
 </body>
 </html>
