@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Site do Lucas</title>
+  <title>Projeto/Renda — Lucas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Fonte profissional -->
@@ -11,143 +11,228 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg1:#0b1224;
+      --bg2:#020617;
+      --card:rgba(255,255,255,.08);
+      --border:rgba(255,255,255,.14);
+      --text:#e5e7eb;
+      --muted:#cbd5e1;
+      --muted2:#9ca3af;
+      --primary:#3b82f6;
+      --primary2:#2563eb;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+    }
+    body{
+      min-height:100vh;
+      font-family:'Inter',sans-serif;
+      background: radial-gradient(900px 500px at 20% 15%, rgba(59,130,246,.25), transparent 60%),
+                  radial-gradient(700px 400px at 80% 80%, rgba(34,197,94,.18), transparent 55%),
+                  linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      padding:22px;
     }
 
-    body {
-      min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0f172a, #020617);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #e5e7eb;
-      padding: 20px;
+    .wrap{
+      max-width:1000px;
+      margin:0 auto;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.08);
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+      opacity:.95;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+      letter-spacing:.3px;
+    }
+    .dot{
+      width:12px;height:12px;border-radius:999px;
+      background:linear-gradient(180deg,var(--primary),rgba(34,197,94,.9));
+      box-shadow:0 0 18px rgba(59,130,246,.6);
+    }
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.05);
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:.78rem;
+      color:var(--muted);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+      margin-bottom:18px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:26px;
       backdrop-filter: blur(12px);
-      border-radius: 16px;
-      padding: 32px;
-      max-width: 520px;
-      width: 100%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      text-align: center;
+      box-shadow:0 22px 45px rgba(0,0,0,.35);
     }
 
-    h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
+    h1{
+      font-size:2.15rem;
+      line-height:1.15;
+      margin-bottom:12px;
+      letter-spacing:.2px;
+    }
+    .sub{
+      color:var(--muted);
+      line-height:1.65;
+      margin-bottom:18px;
+      font-size:1rem;
     }
 
-    p {
-      font-size: 1rem;
-      line-height: 1.6;
-      color: #d1d5db;
-      margin-bottom: 24px;
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+    .badge{
+      background:rgba(59,130,246,.14);
+      border:1px solid rgba(59,130,246,.3);
+      color:#93c5fd;
+      padding:6px 11px;
+      border-radius:999px;
+      font-size:.78rem;
+    }
+    .badge.ok{
+      background:rgba(34,197,94,.14);
+      border:1px solid rgba(34,197,94,.28);
+      color:#86efac;
     }
 
-    .badges {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+    .btn{
+      font-family:'Inter',sans-serif;
+      border:none;
+      cursor:pointer;
+      padding:12px 16px;
+      border-radius:12px;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      font-weight:600;
+      font-size:.95rem;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width: 190px;
+    }
+    .btn.primary{
+      background:var(--primary);
+      color:#fff;
+    }
+    .btn.primary:hover{background:var(--primary2);transform:translateY(-2px)}
+    .btn.ghost{
+      background:transparent;
+      color:#93c5fd;
+      border:1px solid rgba(147,197,253,.38);
+    }
+    .btn.ghost:hover{background:rgba(147,197,253,.09);transform:translateY(-2px)}
+    .btn.small{min-width:auto;padding:10px 12px;font-size:.9rem}
+
+    .miniTitle{
+      font-weight:700;
+      margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .miniText{color:var(--muted);line-height:1.6;font-size:.95rem}
+    .list{margin-top:14px;display:grid;gap:10px}
+    .li{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .ico{
+      width:26px;height:26px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      flex:0 0 auto;
+      margin-top:1px;
+      font-size:.95rem;
     }
 
-    .badge {
-      background: rgba(59, 130, 246, 0.15);
-      color: #93c5fd;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      border: 1px solid rgba(59, 130, 246, 0.3);
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .kpi{
+      padding:18px;
+      border-radius:16px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .kpi b{font-size:1.1rem}
+    .kpi p{color:var(--muted);margin-top:8px;line-height:1.5;font-size:.95rem}
+
+    .sectionTitle{
+      font-size:1.25rem;
+      margin-bottom:10px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .two{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-bottom:18px;
     }
 
-    .actions {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+    .cta{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:flex-start;
     }
-
-    button {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
-      padding: 10px 18px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
+    .cta p{color:var(--muted);line-height:1.6}
+    .footer{
+      margin-top:10px;
+      color:var(--muted2);
+      font-size:.8rem;
+      opacity:.95;
     }
+    .sep{height:1px;background:rgba(255,255,255,.10);margin:16px 0}
 
-    .btn-primary {
-      background: #3b82f6;
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: #2563eb;
-      transform: translateY(-2px);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: #93c5fd;
-      border: 1px solid rgba(147, 197, 253, 0.4);
-    }
-
-    .btn-ghost:hover {
-      background: rgba(147, 197, 253, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .footer {
-      font-size: 0.75rem;
-      color: #9ca3af;
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+      .two{grid-template-columns:1fr}
+      .btn{min-width: 100%;}
     }
   </style>
 </head>
 
 <body>
-  <main class="card">
-    <h1>AGORA SIM! 🚀</h1>
-
-    <p>
-      Este é meu primeiro site, criado do zero. Agora ele já tem estilo,
-      centralização e um visual moderno e profissional.
-    </p>
-
-    <div class="badges">
-      <span class="badge">HTML</span>
-      <span class="badge">CSS</span>
-      <span class="badge">GitHub Pages</span>
-      <span class="badge">HTTPS</span>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <span class="dot"></span>
+        <span>Projeto/Renda — Lucas</span>
+      </div>
+      <span class="pill">GitHub Pages • HTTPS • Site no ar</span>
     </div>
 
-    <div class="actions">
-      <button class="btn-primary"
-        onclick="alert('Você clicou! Seu site já tem interação 😄')">
-        Testar botão
-      </button>
-
-      <button class="btn-ghost"
-        onclick="document.title = 'Site do Lucas ✅'">
-        Mudar título da aba
-      </button>
-    </div>
-
-    <div class="footer">
-      Dica: sempre que editar, salve e atualize o navegador com F5.
-    </div>
-  </main>
-</body>
-</html>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="card">
+        <h1>Transf
