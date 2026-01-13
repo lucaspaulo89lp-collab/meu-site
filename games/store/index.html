@@ -3,204 +3,334 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Loja | PlayTiger Entertainment</title>
-  <meta name="description" content="Loja fictícia de skins, temas e níveis usando Tiger Coins (sem valor real)." />
+  <title>Tiger Memory</title>
+  <meta name="description" content="Jogo da memória com Tiger Coins fictícias. Sem apostas. Apenas entretenimento." />
   <script src="../wallet.js"></script>
   <style>
-    :root{--card:rgba(255,255,255,.07);--stroke:rgba(255,255,255,.14);--r:18px}
+    :root{
+      --stroke: rgba(255,255,255,.14);
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.05);
+      --r: 18px;
+    }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;color:var(--pt-text)}
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:1100px;margin:0 auto;padding:26px 18px 50px}
-    h1{margin:0 0 6px;font-size:28px;letter-spacing:-.5px}
-    p{margin:0;color:var(--pt-muted);line-height:1.6}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--pt-text);
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:18px}
+    .top{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    h1{margin:6px 0 4px;font-size:22px}
+    p{margin:0;color:var(--pt-muted);line-height:1.55}
     .btn{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:10px 12px;border-radius:14px;
-      border:1px solid var(--stroke);background:rgba(255,255,255,.06);
-      font-weight:900;
+      display:inline-flex;gap:10px;align-items:center;
+      padding:10px 12px;border-radius:14px;border:1px solid var(--stroke);
+      background: var(--card);font-weight:900;color:inherit;text-decoration:none;
     }
-    .grid{margin-top:14px;display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
-    .card{border:1px solid var(--stroke);background:var(--card);border-radius:22px;padding:16px}
-    .sec{margin-top:10px}
-    .sec h2{margin:0 0 10px;font-size:18px}
-    .items{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .item{
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05);
-      border-radius:18px;padding:12px;
-      display:flex;flex-direction:column;gap:8px;
+    .panel{
+      display:grid;grid-template-columns: 1.2fr .8fr;gap:12px;align-items:stretch;
     }
-    .item b{font-size:14px}
-    .item small{color:var(--pt-muted);line-height:1.45}
-    .price{display:flex;justify-content:space-between;align-items:center;font-weight:900}
-    .tag{font-size:12px;color:rgba(255,255,255,.85);opacity:.9}
-    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
-    .mini-btn{
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      border-radius:999px;
-      padding:8px 10px;
-      font-weight:900;
-      cursor:pointer;
-      color:rgba(255,255,255,.92);
+    .card{
+      border:1px solid var(--stroke);
+      background: var(--card);
+      border-radius: 22px;
+      padding: 14px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.30);
+      backdrop-filter: blur(10px);
     }
-    .mini-btn.primary{
+    .hud{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:10px
+    }
+    .pill{
+      padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      font-weight:900;font-size:13px;color:rgba(255,255,255,.92);
+    }
+    .primary{
       border:0;
-      background:linear-gradient(135deg,var(--pt-brand),var(--pt-brand2));
+      background: linear-gradient(135deg, var(--pt-brand), var(--pt-brand2));
       color:#06111f;
+      cursor:pointer;
     }
-    .note{
+    .ghost{
+      cursor:pointer;
+      background: rgba(255,255,255,.06);
+    }
+
+    /* tabuleiro */
+    .board{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
       margin-top:12px;
-      padding:12px 14px;border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(0,0,0,.18);
-      color:rgba(255,255,255,.86);
-      font-size:13px;line-height:1.55;
     }
-    .preview{
-      height:160px;border-radius:18px;border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      display:grid;place-items:center;
+    .tile{
+      position:relative;
+      height:110px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      cursor:pointer;
       overflow:hidden;
-      position:relative;
+      transform-style: preserve-3d;
+      transition: transform .18s ease;
+      user-select:none;
     }
-    .chip{
-      position:absolute;left:12px;top:12px;
-      padding:8px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);
-      font-weight:900;font-size:12px;
+    .tile.disabled{cursor:default;opacity:.7}
+    .tile.flipped{transform: rotateY(180deg)}
+    .face{
+      position:absolute; inset:0;
+      display:grid; place-items:center;
+      backface-visibility: hidden;
+      font-weight: 1000;
+      font-size: 34px;
+      letter-spacing: .5px;
     }
-    .tiger{
-      width:120px;height:70px;border-radius:18px;
-      background: linear-gradient(135deg,var(--pt-brand2),var(--pt-brand));
-      position:relative;
+    .back{
+      background:
+        radial-gradient(300px 160px at 30% 20%, color-mix(in srgb, var(--pt-brand) 18%, transparent), transparent 65%),
+        rgba(0,0,0,.18);
+      color: rgba(255,255,255,.92);
     }
-    .tiger:before{
-      content:"";position:absolute;right:-10px;top:18px;
-      width:28px;height:22px;border-radius:10px;
-      background: rgba(255,255,255,.25);
+    .front{
+      transform: rotateY(180deg);
+      background: rgba(255,255,255,.07);
     }
-    .stripe{position:absolute;top:12px;left:18px;width:6px;height:46px;background:rgba(0,0,0,.28)}
-    .stripe.s2{left:36px}.stripe.s3{left:54px}.stripe.s4{left:72px}
-    @media (max-width:980px){.grid{grid-template-columns:1fr}.items{grid-template-columns:1fr}}
+
+    /* Skin aplicada via data-skin (wallet.js) */
+    body[data-skin="classic"] .front{
+      background: linear-gradient(135deg, rgba(54,211,153,.16), rgba(86,208,255,.10));
+    }
+    body[data-skin="neon"] .front{
+      background: linear-gradient(135deg, rgba(86,208,255,.22), rgba(155,135,255,.16));
+      box-shadow: inset 0 0 0 2px rgba(86,208,255,.10);
+    }
+    body[data-skin="gold"] .front{
+      background: linear-gradient(135deg, rgba(255,210,90,.22), rgba(255,240,200,.12));
+      box-shadow: inset 0 0 0 2px rgba(255,210,90,.10);
+    }
+
+    .note{
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.86);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 980px){
+      .panel{grid-template-columns:1fr}
+      .board{grid-template-columns: repeat(3, 1fr);}
+      .tile{height:105px}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="top">
       <div>
-        <h1>🛍️ Loja (Tiger Coins)</h1>
-        <p>Compre <b>skins</b>, <b>temas</b> e <b>packs de níveis</b> usando moedas fictícias. Sem valor real.</p>
+        <h1>🧠 Tiger Memory</h1>
+        <p>Encontre os pares. Ganhe <b>Tiger Coins</b> (fictícias) ao vencer. Sem apostas.</p>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn" href="../index.html">← Voltar para Jogos</a>
-        <a class="btn" href="/meu-site/">🏠 Site</a>
-      </div>
+      <a class="btn" href="../index.html">← Voltar</a>
     </div>
 
-    <div class="grid">
+    <div class="panel">
       <div class="card">
-        <div class="preview">
-          <div class="chip" id="activeLabel">Ativo: tema/skin</div>
-          <div class="tiger skin-accent" id="prevTiger">
-            <div class="stripe"></div><div class="stripe s2"></div><div class="stripe s3"></div><div class="stripe s4"></div>
-          </div>
+        <div class="hud">
+          <span class="pill" id="moves">Tentativas: 0</span>
+          <span class="pill" id="matches">Pares: 0/8</span>
+          <span class="pill" id="pack">Pack: starter</span>
+          <button class="btn primary" id="newGame">Novo jogo</button>
         </div>
 
-        <div class="note">
-          <b>Aviso legal:</b> Tiger Coins são moedas virtuais fictícias, sem valor monetário,
-          não podem ser sacadas, vendidas ou convertidas em dinheiro real.
-        </div>
-
-        <div class="note">
-          <b>Dica:</b> ganhe Coins jogando. Ex.: pontos no Runner, vitória no Memory, metas no 2048.
-        </div>
+        <div class="board" id="board"></div>
       </div>
 
-      <div class="card" id="lists">
-        <!-- listas renderizadas via JS -->
+      <div class="card">
+        <h1 style="font-size:16px;margin:0 0 6px;">Recompensas</h1>
+        <p style="margin:0;color:var(--pt-muted);line-height:1.55;">
+          Você ganha Coins ao vencer. Quanto menos tentativas, maior o bônus.
+        </p>
+
+        <div class="note">
+          <b>Base:</b> 6 Coins ao vencer<br/>
+          <b>Bônus:</b> +4 Coins (≤ 14 tentativas) • +2 Coins (≤ 18 tentativas)
+        </div>
+
+        <div class="note">
+          <b>Aviso legal:</b> Coins são fictícias e não podem ser convertidas em dinheiro real.
+        </div>
+
+        <div class="note">
+          <b>Dica:</b> Vá na <a href="../store/" style="text-decoration:underline">Loja</a> e teste skins e temas.
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    function renderSection(title, type, items){
-      const inv = PT.getInventory();
-      const s = PT.getSettings();
-      const owned = inv[type] || {};
-      const active =
-        type === "themes" ? s.theme :
-        type === "skins"  ? s.skin  :
-        s.levelPack;
+    const ICONS = ["🐅","🌿","⭐","⚡","🍀","🧊","🔥","💎"]; // 8 pares
+    const boardEl = document.getElementById("board");
+    const movesEl = document.getElementById("moves");
+    const matchesEl = document.getElementById("matches");
+    const packEl = document.getElementById("pack");
+    const newGameBtn = document.getElementById("newGame");
 
-      return `
-        <div class="sec">
-          <h2>${title}</h2>
-          <div class="items">
-            ${items.map(it=>{
-              const isOwned = !!owned[it.id];
-              const isActive = active === it.id;
-              const price = it.price === 0 ? "Grátis" : `${it.price} Coins`;
-              return `
-                <div class="item">
-                  <b>${it.name}</b>
-                  <small>${it.desc}</small>
-                  <div class="price">
-                    <span class="tag">${isOwned ? "✅ Comprado" : "🔒 Bloqueado"}</span>
-                    <span>${price}</span>
-                  </div>
-                  <div class="actions">
-                    ${!isOwned ? `<button class="mini-btn primary" onclick="buy('${type}','${it.id}')">Comprar</button>` : ""}
-                    ${isOwned && !isActive ? `<button class="mini-btn" onclick="useItem('${type}','${it.id}')">Usar</button>` : ""}
-                    ${isOwned && isActive ? `<span class="tag">⭐ Ativo</span>` : ""}
-                  </div>
-                </div>
-              `;
-            }).join("")}
-          </div>
-        </div>
-      `;
+    let tiles = [];
+    let flipped = [];
+    let locked = false;
+    let moves = 0;
+    let matches = 0;
+
+    function pack(){
+      const s = PT.getSettings();
+      return (document.body.dataset.levelpack || s.levelPack || "starter");
     }
 
-    function rerender(){
-      const html =
-        renderSection("🎨 Temas", "themes", PT.STORE.themes) +
-        renderSection("🐅 Skins", "skins", PT.STORE.skins) +
-        renderSection("🎚️ Packs de Níveis", "levels", PT.STORE.levels);
+    function applyPack(){
+      const p = pack();
+      packEl.textContent = "Pack: " + p;
 
-      document.getElementById("lists").innerHTML = html;
-      updateActiveLabel();
+      // Packs afetam "dificuldade" via embaralhamento + penalidade de tempo (simples)
+      // starter: normal
+      // easy: mostra tudo 1.2s no início
+      // pro: mostra tudo 0.6s no início
     }
 
-    function updateActiveLabel(){
-      const s = PT.getSettings();
-      document.getElementById("activeLabel").textContent =
-        `Ativo: tema ${s.theme} • skin ${s.skin} • nível ${s.levelPack}`;
-      PT.applyCosmetics();
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]] = [arr[j],arr[i]];
+      }
+      return arr;
     }
 
-    window.buy = (type, id) => {
-      const r = PT.buy(type, id);
-      alert(r.msg);
-      rerender();
-    };
+    function createBoard(){
+      boardEl.innerHTML = "";
+      const pairs = [...ICONS, ...ICONS];
+      shuffle(pairs);
 
-    window.useItem = (type, id) => {
-      const s = PT.getSettings();
-      if(type === "themes") s.theme = id;
-      if(type === "skins")  s.skin = id;
-      if(type === "levels") s.levelPack = id;
-      PT.setSettings(s);
-      rerender();
-    };
+      tiles = pairs.map((icon, idx) => {
+        const d = document.createElement("div");
+        d.className = "tile";
+        d.dataset.icon = icon;
+        d.dataset.idx = String(idx);
+        d.innerHTML = `
+          <div class="face back">?</div>
+          <div class="face front">${icon}</div>
+        `;
+        d.addEventListener("click", () => onTile(d));
+        boardEl.appendChild(d);
+        return d;
+      });
+    }
+
+    function setStats(){
+      movesEl.textContent = "Tentativas: " + moves;
+      matchesEl.textContent = `Pares: ${matches}/8`;
+    }
+
+    function flip(tile){
+      tile.classList.add("flipped");
+      tile.classList.add("disabled");
+    }
+    function unflip(tile){
+      tile.classList.remove("flipped");
+      tile.classList.remove("disabled");
+    }
+
+    function onTile(tile){
+      if(locked) return;
+      if(tile.classList.contains("matched")) return;
+      if(tile.classList.contains("flipped")) return;
+
+      flip(tile);
+      flipped.push(tile);
+
+      if(flipped.length === 2){
+        locked = true;
+        moves++;
+        setStats();
+
+        const [a,b] = flipped;
+        const same = a.dataset.icon === b.dataset.icon;
+
+        setTimeout(() => {
+          if(same){
+            a.classList.add("matched");
+            b.classList.add("matched");
+            matches++;
+            setStats();
+
+            if(matches === 8){
+              reward();
+            }
+          }else{
+            unflip(a);
+            unflip(b);
+          }
+          flipped = [];
+          locked = false;
+        }, 520);
+      }
+    }
+
+    function reward(){
+      const base = 6;
+      let bonus = 0;
+      if(moves <= 14) bonus = 4;
+      else if(moves <= 18) bonus = 2;
+
+      // pack: pro dá +1 coin (mas é mais difícil); easy tira -1 (mais fácil)
+      const p = pack();
+      let packAdj = 0;
+      if(p === "pro") packAdj = 1;
+      if(p === "easy") packAdj = -1;
+
+      const total = Math.max(1, base + bonus + packAdj);
+      PT.addCoins(total);
+
+      setTimeout(() => {
+        alert(`🎉 Você venceu! +${total} Tiger Coins 🐅\nTentativas: ${moves}\n\n(As moedas são fictícias e não têm valor real.)`);
+      }, 80);
+    }
+
+    function revealStart(){
+      const p = pack();
+      const ms = (p === "easy") ? 1200 : (p === "pro") ? 600 : 900;
+
+      tiles.forEach(t => t.classList.add("flipped","disabled"));
+      setTimeout(() => {
+        tiles.forEach(t => {
+          t.classList.remove("flipped","disabled");
+        });
+      }, ms);
+    }
+
+    function newGame(){
+      moves = 0;
+      matches = 0;
+      flipped = [];
+      locked = false;
+      applyPack();
+      createBoard();
+      setStats();
+      revealStart();
+    }
 
     document.addEventListener("DOMContentLoaded", () => {
       PT.ensureHUD();
       PT.applyCosmetics();
-      rerender();
+      newGameBtn.addEventListener("click", newGame);
+      newGame();
     });
   </script>
 </body>
