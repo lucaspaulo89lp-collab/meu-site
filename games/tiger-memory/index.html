@@ -1,743 +1,325 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Tiger Memory</title>
-  <meta name="description" content="Jogo da memória com Tiger Coins fictícias. Sem apostas. Apenas entretenimento." />
-  <script src="../wallet.js"></script>
-  <style>
-    :root{
-      --stroke: rgba(255,255,255,.14);
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.05);
-      --r: 18px;
+(function(){
+  // ---------- Helpers ----------
+  const $ = (id) => document.getElementById(id);
+
+  function pad(n){ return String(n).padStart(2,"0"); }
+  function fmtTime(sec){
+    const m = Math.floor(sec/60);
+    const s = sec % 60;
+    return `${pad(m)}:${pad(s)}`;
+  }
+
+  function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color: var(--pt-text);
+    return arr;
+  }
+
+  // ---------- Wallet integration ----------
+  function getCoins(){
+    // Usa sua API global do wallet.js se existir
+    if(window.PT && typeof window.PT.getCoins === "function") return window.PT.getCoins();
+    // fallback
+    const v = localStorage.getItem("pt_coins");
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function addCoins(amount){
+    if(amount <= 0) return;
+    if(window.PT && typeof window.PT.addCoins === "function") {
+      window.PT.addCoins(amount);
+      return;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:18px}
-    .top{
-      display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;
-      margin-bottom:12px;
+    // fallback
+    const current = getCoins();
+    localStorage.setItem("pt_coins", String(current + amount));
+  }
+
+  function setTheme(theme){
+    // Se wallet.js tiver applyCosmetics, usa
+    if(window.PT && typeof window.PT.applyCosmetics === "function"){
+      // aplica só tema (skin fica default)
+      const settings = (window.PT.getSettings && window.PT.getSettings()) || {};
+      settings.theme = theme;
+      if(window.PT.setSettings) window.PT.setSettings(settings);
+      window.PT.applyCosmetics();
+    } else {
+      // fallback simples via atributo
+      document.body.setAttribute("data-skin", theme);
     }
-    h1{margin:6px 0 4px;font-size:22px}
-    p{margin:0;color:var(--pt-muted);line-height:1.55}
-    .btn{
-      display:inline-flex;gap:10px;align-items:center;
-      padding:10px 12px;border-radius:14px;border:1px solid var(--stroke);
-      background: var(--card);font-weight:900;color:inherit;text-decoration:none;
+  }
+
+  function updateCoinsUI(){
+    const el = $("coinVal");
+    if(el) el.textContent = String(getCoins());
+  }
+
+  // ---------- Game config ----------
+  const SYMBOLS = ["🐯","🍀","💎","🔥","⚡","🌙","🧠","🎯","🪙","🎮","⭐","🧩","🟩","🟦","🟧","🟥","🟪","🟨"];
+  const DIFF = {
+    easy:  { cols:4, rows:3, label:"Fácil",  baseReward: 8 },
+    normal:{ cols:4, rows:4, label:"Normal", baseReward: 12 },
+    hard:  { cols:6, rows:4, label:"Difícil", baseReward: 18 }
+  };
+
+  let state = null;
+  let timer = null;
+
+  function resetState(){
+    state = {
+      started:false,
+      locked:false,
+      moves:0,
+      pairs:0,
+      totalPairs:0,
+      time:0,
+      first:null,
+      second:null,
+      diffKey:"normal",
+      theme:"aurora"
+    };
+  }
+
+  function stopTimer(){
+    if(timer){ clearInterval(timer); timer = null; }
+  }
+
+  function startTimer(){
+    stopTimer();
+    timer = setInterval(() => {
+      state.time++;
+      $("timeVal").textContent = fmtTime(state.time);
+      updateRewardPreview();
+    }, 1000);
+  }
+
+  function updateHeader(){
+    $("movesVal").textContent = String(state.moves);
+    $("pairsVal").textContent = String(state.pairs);
+    $("pairsTotal").textContent = String(state.totalPairs);
+    $("diffVal").textContent = DIFF[state.diffKey].label;
+    updateCoinsUI();
+    updateRewardPreview();
+  }
+
+  function calcReward(){
+    // recompensa fictícia: base + bônus por desempenho
+    const base = DIFF[state.diffKey].baseReward;
+
+    // movimentos "ideais" = total cards * 1.1 aprox
+    const idealMoves = Math.ceil(state.totalPairs * 2 * 1.1);
+    const moveBonus = Math.max(0, Math.round((idealMoves - state.moves) * 0.8));
+
+    // bônus de tempo: quanto mais rápido, maior
+    // hard tolera mais tempo
+    const timeTarget = state.diffKey === "hard" ? 90 : state.diffKey === "normal" ? 70 : 55;
+    const timeBonus = Math.max(0, Math.round((timeTarget - state.time) * 0.2));
+
+    // limita
+    const total = Math.max(4, Math.min(60, base + moveBonus + timeBonus));
+    return total;
+  }
+
+  function updateRewardPreview(){
+    const el = $("rewardPreview");
+    if(!el) return;
+    if(!state.started){
+      el.textContent = `+${DIFF[state.diffKey].baseReward} 🪙`;
+      return;
     }
-    .panel{
-      display:grid;grid-template-columns: 1.2fr .8fr;gap:12px;align-items:stretch;
-    }
-    .card{
-      border:1px solid var(--stroke);
-      background: var(--card);
-      border-radius: 22px;
-      padding: 14px;
-      box-shadow: 0 18px 40px rgba(0,0,0,.30);
-      backdrop-filter: blur(10px);
-    }
-    .hud{
-      display:flex;gap:10px;flex-wrap:wrap;margin-top:10px
-    }
-    .pill{
-      padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      font-weight:900;font-size:13px;color:rgba(255,255,255,.92);
-    }
-    .primary{
-      border:0;
-      background: linear-gradient(135deg, var(--pt-brand), var(--pt-brand2));
-      color:#06111f;
-      cursor:pointer;
-    }
-    .ghost{
-      cursor:pointer;
-      background: rgba(255,255,255,.06);
-    }
-
-    /* tabuleiro */
-    .board{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:10px;
-      margin-top:12px;
-    }
-    .tile{
-      position:relative;
-      height:110px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      cursor:pointer;
-      overflow:hidden;
-      transform-style: preserve-3d;
-      transition: transform .18s ease;
-      user-select:none;
-    }
-    .tile.disabled{cursor:default;opacity:.7}
-    .tile.flipped{transform: rotateY(180deg)}
-    .face{
-      position:absolute; inset:0;
-      display:grid; place-items:center;
-      backface-visibility: hidden;
-      font-weight: 1000;
-      font-size: 34px;
-      letter-spacing: .5px;
-    }
-    .back{
-      background:
-        radial-gradient(300px 160px at 30% 20%, color-mix(in srgb, var(--pt-brand) 18%, transparent), transparent 65%),
-        rgba(0,0,0,.18);
-      color: rgba(255,255,255,.92);
-    }
-    .front{
-      transform: rotateY(180deg);
-      background: rgba(255,255,255,.07);
-    }
-
-    /* Skin aplicada via data-skin (wallet.js) */
-    body[data-skin="classic"] .front{
-      background: linear-gradient(135deg, rgba(54,211,153,.16), rgba(86,208,255,.10));
-    }
-    body[data-skin="neon"] .front{
-      background: linear-gradient(135deg, rgba(86,208,255,.22), rgba(155,135,255,.16));
-      box-shadow: inset 0 0 0 2px rgba(86,208,255,.10);
-    }
-    body[data-skin="gold"] .front{
-      background: linear-gradient(135deg, rgba(255,210,90,.22), rgba(255,240,200,.12));
-      box-shadow: inset 0 0 0 2px rgba(255,210,90,.10);
-    }
-
-    .note{
-      margin-top:10px;
-      padding:12px 14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      color: rgba(255,255,255,.86);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    @media (max-width: 980px){
-      .panel{grid-template-columns:1fr}
-      .board{grid-template-columns: repeat(3, 1fr);}
-      .tile{height:105px}
-    }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="top">
-      <div>
-        <h1>🧠 Tiger Memory</h1>
-        <p>Encontre os pares. Ganhe <b>Tiger Coins</b> (fictícias) ao vencer. Sem apostas.</p>
-      </div>
-      <a class="btn" href="../index.html">← Voltar</a>
-    </div>
-
-    <div class="panel">
-      <div class="card">
-        <div class="hud">
-          <span class="pill" id="moves">Tentativas: 0</span>
-          <span class="pill" id="matches">Pares: 0/8</span>
-          <span class="pill" id="pack">Pack: starter</span>
-          <button class="btn primary" id="newGame">Novo jogo</button>
-        </div>
-
-        <div class="board" id="board"></div>
-      </div>
-
-      <div class="card">
-        <h1 style="font-size:16px;margin:0 0 6px;">Recompensas</h1>
-        <p style="margin:0;color:var(--pt-muted);line-height:1.55;">
-          Você ganha Coins ao vencer. Quanto menos tentativas, maior o bônus.
-        </p>
-
-        <div class="note">
-          <b>Base:</b> 6 Coins ao vencer<br/>
-          <b>Bônus:</b> +4 Coins (≤ 14 tentativas) • +2 Coins (≤ 18 tentativas)
-        </div>
-
-        <div class="note">
-          <b>Aviso legal:</b> Coins são fictícias e não podem ser convertidas em dinheiro real.
-        </div>
-
-        <div class="note">
-          <b>Dica:</b> Vá na <a href="../store/" style="text-decoration:underline">Loja</a> e teste skins e temas.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const ICONS = ["🐅","🌿","⭐","⚡","🍀","🧊","🔥","💎"]; // 8 pares
-    const boardEl = document.getElementById("board");
-    const movesEl = document.getElementById("moves");
-    const matchesEl = document.getElementById("matches");
-    const packEl = document.getElementById("pack");
-    const newGameBtn = document.getElementById("newGame");
-
-    let tiles = [];
-    let flipped = [];
-    let locked = false;
-    let moves = 0;
-    let matches = 0;
-
-    function pack(){
-      const s = PT.getSettings();
-      return (document.body.dataset.levelpack || s.levelPack || "starter");
-    }
-
-    function applyPack(){
-      const p = pack();
-      packEl.textContent = "Pack: " + p;
-
-      // Packs afetam "dificuldade" via embaralhamento + penalidade de tempo (simples)
-      // starter: normal
-      // easy: mostra tudo 1.2s no início
-      // pro: mostra tudo 0.6s no início
-    }
-
-    function shuffle(arr){
-      for(let i=arr.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [arr[i],arr[j]] = [arr[j],arr[i]];
-      }
-      return arr;
-    }
-
-    function createBoard(){
-      boardEl.innerHTML = "";
-      const pairs = [...ICONS, ...ICONS];
-      shuffle(pairs);
-
-      tiles = pairs.map((icon, idx) => {
-        const d = document.createElement("div");
-        d.className = "tile";
-        d.dataset.icon = icon;
-        d.dataset.idx = String(idx);
-        d.innerHTML = `
-          <div class="face back">?</div>
-          <div class="face front">${icon}</div>
-        `;
-        d.addEventListener("click", () => onTile(d));
-        boardEl.appendChild(d);
-        return d;
-      });
-    }
-
-    function setStats(){
-      movesEl.textContent = "Tentativas: " + moves;
-      matchesEl.textContent = `Pares: ${matches}/8`;
-    }
-
-    function flip(tile){
-      tile.classList.add("flipped");
-      tile.classList.add("disabled");
-    }
-    function unflip(tile){
-      tile.classList.remove("flipped");
-      tile.classList.remove("disabled");
-    }
-
-    function onTile(tile){
-      if(locked) return;
-      if(tile.classList.contains("matched")) return;
-      if(tile.classList.contains("flipped")) return;
-
-      flip(tile);
-      flipped.push(tile);
-
-      if(flipped.length === 2){
-        locked = true;
-        moves++;
-        setStats();
-
-        const [a,b] = flipped;
-        const same = a.dataset.icon === b.dataset.icon;
-
-        setTimeout(() => {
-          if(same){
-            a.classList.add("matched");
-            b.classList.add("matched");
-            matches++;
-            setStats();
-
-            if(matches === 8){
-              reward();
-            }
-          }else{
-            unflip(a);
-            unflip(b);
-          }
-          flipped = [];
-          locked = false;
-        }, 520);
-      }
-    }
-
-    function reward(){
-      const base = 6;
-      let bonus = 0;
-      if(moves <= 14) bonus = 4;
-      else if(moves <= 18) bonus = 2;
-
-      // pack: pro dá +1 coin (mas é mais difícil); easy tira -1 (mais fácil)
-      const p = pack();
-      let packAdj = 0;
-      if(p === "pro") packAdj = 1;
-      if(p === "easy") packAdj = -1;
-
-      const total = Math.max(1, base + bonus + packAdj);
-      PT.addCoins(total);
-
-      setTimeout(() => {
-        alert(`🎉 Você venceu! +${total} Tiger Coins 🐅\nTentativas: ${moves}\n\n(As moedas são fictícias e não têm valor real.)`);
-      }, 80);
-    }
-
-    function revealStart(){
-      const p = pack();
-      const ms = (p === "easy") ? 1200 : (p === "pro") ? 600 : 900;
-
-      tiles.forEach(t => t.classList.add("flipped","disabled"));
-      setTimeout(() => {
-        tiles.forEach(t => {
-          t.classList.remove("flipped","disabled");
-        });
-      }, ms);
-    }
-
-    function newGame(){
-      moves = 0;
-      matches = 0;
-      flipped = [];
-      locked = false;
-      applyPack();
-      createBoard();
-      setStats();
-      revealStart();
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      PT.ensureHUD();
-      PT.applyCosmetics();
-      newGameBtn.addEventListener("click", newGame);
-      newGame();
-    });
-  </script>
-</body>
-</html>
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Tiger 2048</title>
-  <meta name="description" content="Jogo 2048 com Tiger Coins fictícias. Sem apostas. Apenas entretenimento." />
-  <script src="../wallet.js"></script>
-  <style>
-    :root{
-      --stroke: rgba(255,255,255,.14);
-      --card: rgba(255,255,255,.06);
-      --r: 18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color: var(--pt-text);
-    }
-    .wrap{max-width:980px;margin:0 auto;padding:18px}
-    .top{
-      display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;
-      margin-bottom:12px;
-    }
-    h1{margin:6px 0 4px;font-size:22px}
-    p{margin:0;color:var(--pt-muted);line-height:1.55}
-    a{color:inherit;text-decoration:none}
-    .btn{
-      display:inline-flex;gap:10px;align-items:center;
-      padding:10px 12px;border-radius:14px;border:1px solid var(--stroke);
-      background: var(--card);font-weight:900;color:inherit;text-decoration:none;
-    }
-
-    .layout{display:grid;grid-template-columns: 1fr .9fr;gap:12px;align-items:stretch;}
-    .card{
-      border:1px solid var(--stroke);
-      background: var(--card);
-      border-radius: 22px;
-      padding: 14px;
-      box-shadow: 0 18px 40px rgba(0,0,0,.30);
-      backdrop-filter: blur(10px);
-    }
-
-    .hud{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .pill{
-      padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      font-weight:900;font-size:13px;color:rgba(255,255,255,.92);
-    }
-    .primary{
-      border:0;
-      background: linear-gradient(135deg, var(--pt-brand), var(--pt-brand2));
-      color:#06111f;
-      cursor:pointer;
-    }
-
-    .grid{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:10px;
-      padding:12px;
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.16);
-    }
-    .cell{
-      height:82px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      display:grid;place-items:center;
-      font-weight:1000;
-      font-size: 22px;
-      letter-spacing: .4px;
-      user-select:none;
-    }
-
-    /* Tema + Skin (variações visuais) */
-    body[data-skin="classic"] .cell.value{background: linear-gradient(135deg, rgba(54,211,153,.16), rgba(86,208,255,.10));}
-    body[data-skin="neon"] .cell.value{background: linear-gradient(135deg, rgba(86,208,255,.22), rgba(155,135,255,.16)); box-shadow: inset 0 0 0 2px rgba(86,208,255,.10);}
-    body[data-skin="gold"] .cell.value{background: linear-gradient(135deg, rgba(255,210,90,.22), rgba(255,240,200,.12)); box-shadow: inset 0 0 0 2px rgba(255,210,90,.10);}
-
-    .note{
-      margin-top:10px;
-      padding:12px 14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      color: rgba(255,255,255,.86);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    @media (max-width: 980px){
-      .layout{grid-template-columns:1fr}
-      .cell{height:76px}
-    }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="top">
-      <div>
-        <h1>🔢 Tiger 2048</h1>
-        <p>Combine blocos. Ganhe <b>Tiger Coins</b> (fictícias) ao atingir metas. Sem apostas.</p>
-      </div>
-      <a class="btn" href="../index.html">← Voltar</a>
-    </div>
-
-    <div class="layout">
-      <div class="card">
-        <div class="hud">
-          <span class="pill" id="score">Score: 0</span>
-          <span class="pill" id="best">Recorde: 0</span>
-          <span class="pill" id="pack">Pack: starter</span>
-          <button class="btn primary" id="newGame">Novo jogo</button>
-        </div>
-
-        <div class="grid" id="grid"></div>
-
-        <div class="note">
-          <b>Controles:</b> Setas do teclado (↑ ↓ ← →) ou arraste na tela (mobile).
-        </div>
-      </div>
-
-      <div class="card">
-        <h1 style="font-size:16px;margin:0 0 6px;">Recompensas</h1>
-        <p style="margin:0;color:var(--pt-muted);line-height:1.55;">
-          Você ganha Coins ao alcançar metas — apenas 1 vez por meta.
-        </p>
-
-        <div class="note">
-          <b>Metas:</b><br/>
-          256 → +2 Coins<br/>
-          512 → +3 Coins<br/>
-          1024 → +5 Coins<br/>
-          2048 → +10 Coins
-        </div>
-
-        <div class="note">
-          <b>Aviso legal:</b> Coins são fictícias e não podem ser convertidas em dinheiro real.
-        </div>
-
-        <div class="note">
-          <b>Loja:</b> use Coins para skins/temas/níveis em <a href="../store/" style="text-decoration:underline">/games/store</a>.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const gridEl = document.getElementById("grid");
-    const scoreEl = document.getElementById("score");
-    const bestEl  = document.getElementById("best");
-    const packEl  = document.getElementById("pack");
-    const newBtn  = document.getElementById("newGame");
-
-    const SIZE = 4;
-    let board, score, best;
-    let rewarded = {}; // metas já pagas nesta instalação (persistente)
-
-    function getPack(){
-      const s = PT.getSettings();
-      return (document.body.dataset.levelpack || s.levelPack || "starter");
-    }
-
-    function packSettings(){
-      const p = getPack();
-      packEl.textContent = "Pack: " + p;
-
-      // Packs mexem em spawn (mais fácil ou difícil):
-      // easy: mais chances de spawn 2
-      // pro: mais chances de spawn 4
-      if(p === "easy") return { chance4: 0.04 };
-      if(p === "pro")  return { chance4: 0.16 };
-      return { chance4: 0.10 };
-    }
-
-    function keyRewards(){
-      // metas ficam salvas entre sessões para evitar "farm" infinito recomeçando:
-      // (ainda é fictício, mas fica mais profissional)
-      const key = "pt_2048_rewards";
-      try{
-        rewarded = JSON.parse(localStorage.getItem(key) || "{}");
-      }catch(e){ rewarded = {}; }
-      return {
-        get(){ return rewarded; },
-        set(obj){ rewarded = obj; localStorage.setItem(key, JSON.stringify(rewarded)); }
-      };
-    }
-    const R = keyRewards();
-
-    function emptyBoard(){
-      return Array.from({length: SIZE}, () => Array(SIZE).fill(0));
-    }
-
-    function randomEmptyCell(){
-      const empties = [];
-      for(let r=0;r<SIZE;r++){
-        for(let c=0;c<SIZE;c++){
-          if(board[r][c] === 0) empties.push([r,c]);
-        }
-      }
-      if(empties.length === 0) return null;
-      return empties[Math.floor(Math.random()*empties.length)];
-    }
-
-    function spawn(){
-      const p = packSettings();
-      const cell = randomEmptyCell();
-      if(!cell) return false;
-      const [r,c] = cell;
-      const v = (Math.random() < p.chance4) ? 4 : 2;
-      board[r][c] = v;
-      return true;
-    }
-
-    function render(){
-      gridEl.innerHTML = "";
-      for(let r=0;r<SIZE;r++){
-        for(let c=0;c<SIZE;c++){
-          const v = board[r][c];
-          const d = document.createElement("div");
-          d.className = "cell" + (v ? " value" : "");
-          d.textContent = v ? String(v) : "";
-          gridEl.appendChild(d);
-        }
-      }
-      scoreEl.textContent = "Score: " + score;
-      bestEl.textContent  = "Recorde: " + best;
-    }
-
-    function compress(line){
-      const arr = line.filter(x => x !== 0);
-      while(arr.length < SIZE) arr.push(0);
-      return arr;
-    }
-
-    function merge(line){
-      for(let i=0;i<SIZE-1;i++){
-        if(line[i] !== 0 && line[i] === line[i+1]){
-          line[i] *= 2;
-          score += line[i];
-          line[i+1] = 0;
-          checkMilestone(line[i]);
-        }
-      }
-      return compress(line);
-    }
-
-    function moveLeft(){
-      let moved = false;
-      for(let r=0;r<SIZE;r++){
-        const row = board[r].slice();
-        const newRow = merge(compress(row));
-        if(newRow.join(",") !== row.join(",")) moved = true;
-        board[r] = newRow;
-      }
-      return moved;
-    }
-
-    function moveRight(){
-      let moved = false;
-      for(let r=0;r<SIZE;r++){
-        const row = board[r].slice().reverse();
-        const newRow = merge(compress(row)).reverse();
-        if(newRow.join(",") !== board[r].slice().join(",")) moved = true;
-        board[r] = newRow;
-      }
-      return moved;
-    }
-
-    function moveUp(){
-      let moved = false;
-      for(let c=0;c<SIZE;c++){
-        const col = [];
-        for(let r=0;r<SIZE;r++) col.push(board[r][c]);
-        const newCol = merge(compress(col));
-        for(let r=0;r<SIZE;r++){
-          if(board[r][c] !== newCol[r]) moved = true;
-          board[r][c] = newCol[r];
-        }
-      }
-      return moved;
-    }
-
-    function moveDown(){
-      let moved = false;
-      for(let c=0;c<SIZE;c++){
-        const col = [];
-        for(let r=0;r<SIZE;r++) col.push(board[r][c]);
-        const rev = col.reverse();
-        const newCol = merge(compress(rev)).reverse();
-        for(let r=0;r<SIZE;r++){
-          if(board[r][c] !== newCol[r]) moved = true;
-          board[r][c] = newCol[r];
-        }
-      }
-      return moved;
-    }
-
-    function canMove(){
-      if(randomEmptyCell()) return true;
-      for(let r=0;r<SIZE;r++){
-        for(let c=0;c<SIZE;c++){
-          const v = board[r][c];
-          if(r<SIZE-1 && board[r+1][c] === v) return true;
-          if(c<SIZE-1 && board[r][c+1] === v) return true;
-        }
-      }
-      return false;
-    }
-
-    function checkMilestone(value){
-      const rewardMap = {256:2, 512:3, 1024:5, 2048:10};
-      if(!rewardMap[value]) return;
-
-      const all = R.get();
-      const key = String(value);
-      if(all[key]) return; // já pagou essa meta alguma vez
-
-      all[key] = true;
-      R.set(all);
-
-      PT.addCoins(rewardMap[value]);
-      setTimeout(() => {
-        alert(`🎉 Meta alcançada: ${value}!\n+${rewardMap[value]} Tiger Coins 🐅\n\n(As moedas são fictícias e não têm valor real.)`);
-      }, 60);
-    }
-
-    function step(dir){
-      let moved = false;
-      if(dir === "L") moved = moveLeft();
-      if(dir === "R") moved = moveRight();
-      if(dir === "U") moved = moveUp();
-      if(dir === "D") moved = moveDown();
-
-      if(moved){
-        spawn();
-        if(score > best){
-          best = score;
-          localStorage.setItem("pt_2048_best", String(best));
-        }
-        render();
-
-        if(!canMove()){
-          setTimeout(() => alert("Game Over! Clique em 'Novo jogo' para recomeçar."), 60);
-        }
-      }
-    }
-
-    function newGame(){
-      board = emptyBoard();
-      score = 0;
-      best = Number(localStorage.getItem("pt_2048_best") || 0);
-      packSettings();
-      spawn();
-      spawn();
-      render();
-    }
-
-    // teclado
-    document.addEventListener("keydown", (e) => {
-      const k = e.key;
-      if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(k)){
-        e.preventDefault();
-        if(k === "ArrowLeft") step("L");
-        if(k === "ArrowRight") step("R");
-        if(k === "ArrowUp") step("U");
-        if(k === "ArrowDown") step("D");
-      }
+    el.textContent = `+${calcReward()} 🪙`;
+  }
+
+  function buildDeck(){
+    const {cols, rows} = DIFF[state.diffKey];
+    const totalCards = cols * rows;
+    const pairs = Math.floor(totalCards / 2);
+    state.totalPairs = pairs;
+
+    const chosen = SYMBOLS.slice(0, pairs);
+    const deck = shuffle([...chosen, ...chosen]);
+
+    const board = $("board");
+    board.innerHTML = "";
+    board.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+    deck.forEach((sym, idx) => {
+      const card = document.createElement("button");
+      card.className = "card";
+      card.type = "button";
+      card.setAttribute("aria-label", "Carta");
+      card.dataset.symbol = sym;
+      card.dataset.index = String(idx);
+
+      const back = document.createElement("div");
+      back.className = "cardInner cardBack";
+      back.textContent = "🐾";
+
+      const front = document.createElement("div");
+      front.className = "cardInner cardFront";
+      front.textContent = sym;
+
+      card.appendChild(back);
+      card.appendChild(front);
+
+      card.addEventListener("click", () => onCardClick(card));
+
+      board.appendChild(card);
     });
 
-    // swipe mobile
-    let sx=0, sy=0, tracking=false;
-    document.addEventListener("touchstart", (e)=>{
-      const t = e.touches[0];
-      sx = t.clientX; sy = t.clientY; tracking = true;
-    }, {passive:true});
+    updateHeader();
+  }
 
-    document.addEventListener("touchend", (e)=>{
-      if(!tracking) return;
-      tracking = false;
-      const t = e.changedTouches[0];
-      const dx = t.clientX - sx;
-      const dy = t.clientY - sy;
-      const ax = Math.abs(dx), ay = Math.abs(dy);
-      if(Math.max(ax,ay) < 30) return;
-      if(ax > ay){
-        step(dx > 0 ? "R" : "L");
-      }else{
-        step(dy > 0 ? "D" : "U");
+  function flip(card){
+    card.classList.add("flipped");
+  }
+  function unflip(card){
+    card.classList.remove("flipped");
+  }
+  function lock(card){
+    card.classList.add("matched");
+    card.disabled = true;
+  }
+
+  function onCardClick(card){
+    if(!state.started) return;
+    if(state.locked) return;
+    if(card.classList.contains("matched")) return;
+    if(card === state.first) return;
+
+    flip(card);
+
+    if(!state.first){
+      state.first = card;
+      return;
+    }
+
+    state.second = card;
+    state.moves++;
+    $("movesVal").textContent = String(state.moves);
+
+    const a = state.first.dataset.symbol;
+    const b = state.second.dataset.symbol;
+
+    if(a === b){
+      lock(state.first);
+      lock(state.second);
+      state.pairs++;
+      $("pairsVal").textContent = String(state.pairs);
+
+      state.first = null;
+      state.second = null;
+
+      if(state.pairs >= state.totalPairs){
+        onWin();
       }
-    }, {passive:true});
+      return;
+    }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      PT.ensureHUD();
-      PT.applyCosmetics();
-      newBtn.addEventListener("click", newGame);
-      newGame();
+    // errou
+    state.locked = true;
+    setTimeout(() => {
+      unflip(state.first);
+      unflip(state.second);
+      state.first = null;
+      state.second = null;
+      state.locked = false;
+    }, 520);
+  }
+
+  function onWin(){
+    stopTimer();
+
+    const reward = calcReward();
+    addCoins(reward);
+    updateCoinsUI();
+
+    const summary = `Tempo: ${fmtTime(state.time)} • Movimentos: ${state.moves} • Dificuldade: ${DIFF[state.diffKey].label}`;
+    $("winSummary").textContent = summary;
+    $("winReward").textContent = `+${reward} 🪙 (fictício)`;
+
+    const modal = $("winModal");
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden","false");
+  }
+
+  function closeWin(){
+    const modal = $("winModal");
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden","true");
+  }
+
+  function startGame(){
+    closeWin();
+    state.started = true;
+    state.moves = 0;
+    state.pairs = 0;
+    state.time = 0;
+    state.first = null;
+    state.second = null;
+    state.locked = false;
+
+    $("timeVal").textContent = "00:00";
+    $("movesVal").textContent = "0";
+    $("pairsVal").textContent = "0";
+
+    buildDeck();
+    startTimer();
+    updateHeader();
+  }
+
+  // ---------- UI Events ----------
+  function bindUI(){
+    $("difficulty").addEventListener("change", (e) => {
+      state.diffKey = e.target.value;
+      updateHeader();
+      // se já começou, rebuild com reset
+      if(state.started) startGame();
+      else buildDeck();
     });
-  </script>
-</body>
-</html>
+
+    $("theme").addEventListener("change", (e) => {
+      state.theme = e.target.value;
+      setTheme(state.theme);
+    });
+
+    $("btnStart").addEventListener("click", startGame);
+    $("btnReset").addEventListener("click", () => {
+      state.started = false;
+      stopTimer();
+      $("timeVal").textContent = "00:00";
+      $("movesVal").textContent = "0";
+      $("pairsVal").textContent = "0";
+      closeWin();
+      buildDeck();
+      updateHeader();
+    });
+
+    $("btnPlayAgain").addEventListener("click", startGame);
+  }
+
+  // ---------- Boot ----------
+  window.addEventListener("DOMContentLoaded", () => {
+    resetState();
+    bindUI();
+
+    // aplica tema inicial (pega do wallet se existir)
+    try{
+      if(window.PT && typeof window.PT.getSettings === "function"){
+        const s = window.PT.getSettings();
+        if(s && s.theme) state.theme = s.theme;
+      }
+    }catch(e){}
+    $("theme").value = state.theme;
+    setTheme(state.theme);
+
+    buildDeck();
+    updateCoinsUI();
+
+    // atualiza saldo sempre
+    setInterval(updateCoinsUI, 900);
+  });
+})();
