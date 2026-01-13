@@ -2,237 +2,588 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Projeto/Renda — Lucas</title>
+  <title>Sites Profissionais — Lucas | Criação de Sites e Landing Pages</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fonte profissional -->
+  <!-- Fonte -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg1:#0b1224;
-      --bg2:#020617;
+      --bg1:#0b1224; --bg2:#020617;
       --card:rgba(255,255,255,.08);
       --border:rgba(255,255,255,.14);
-      --text:#e5e7eb;
-      --muted:#cbd5e1;
-      --muted2:#9ca3af;
-      --primary:#3b82f6;
-      --primary2:#2563eb;
-      --ok:#22c55e;
-      --warn:#f59e0b;
+      --text:#e5e7eb; --muted:#cbd5e1; --muted2:#9ca3af;
+      --primary:#3b82f6; --primary2:#2563eb;
+      --ok:#22c55e; --warn:#f59e0b;
+      --shadow:0 22px 45px rgba(0,0,0,.35);
+      --radius:18px;
     }
+
     body{
       min-height:100vh;
       font-family:'Inter',sans-serif;
-      background: radial-gradient(900px 500px at 20% 15%, rgba(59,130,246,.25), transparent 60%),
-                  radial-gradient(700px 400px at 80% 80%, rgba(34,197,94,.18), transparent 55%),
-                  linear-gradient(135deg,var(--bg1),var(--bg2));
+      background:
+        radial-gradient(900px 520px at 20% 15%, rgba(59,130,246,.25), transparent 60%),
+        radial-gradient(720px 420px at 80% 80%, rgba(34,197,94,.18), transparent 55%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
       color:var(--text);
       padding:22px;
     }
 
-    .wrap{
-      max-width:1000px;
-      margin:0 auto;
-    }
-
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1080px;margin:0 auto}
     .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:18px;
-      opacity:.95;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      padding:14px 14px 18px 14px;
     }
     .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:700;
-      letter-spacing:.3px;
+      display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px;
     }
     .dot{
-      width:12px;height:12px;border-radius:999px;
-      background:linear-gradient(180deg,var(--primary),rgba(34,197,94,.9));
+      width:12px;height:12px;border-radius:50%;
+      background:linear-gradient(180deg,var(--primary),var(--ok));
       box-shadow:0 0 18px rgba(59,130,246,.6);
     }
     .pill{
       border:1px solid var(--border);
       background:rgba(255,255,255,.05);
-      padding:7px 12px;
-      border-radius:999px;
-      font-size:.78rem;
-      color:var(--muted);
-    }
-
-    .hero{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:18px;
-      align-items:stretch;
-      margin-bottom:18px;
+      padding:7px 12px;border-radius:999px;
+      font-size:.78rem;color:var(--muted);
+      white-space:nowrap;
     }
 
     .card{
       background:var(--card);
       border:1px solid var(--border);
-      border-radius:18px;
+      border-radius:var(--radius);
       padding:26px;
       backdrop-filter: blur(12px);
-      box-shadow:0 22px 45px rgba(0,0,0,.35);
+      box-shadow:var(--shadow);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:16px;
+      margin-bottom:16px;
     }
 
     h1{
-      font-size:2.15rem;
-      line-height:1.15;
+      font-size:2.35rem;
+      line-height:1.12;
       margin-bottom:12px;
       letter-spacing:.2px;
+      font-weight:800;
     }
     .sub{
       color:var(--muted);
       line-height:1.65;
-      margin-bottom:18px;
       font-size:1rem;
+      margin-bottom:18px;
     }
 
     .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
     .badge{
+      padding:6px 11px;border-radius:999px;font-size:.78rem;
       background:rgba(59,130,246,.14);
-      border:1px solid rgba(59,130,246,.3);
+      border:1px solid rgba(59,130,246,.30);
       color:#93c5fd;
-      padding:6px 11px;
-      border-radius:999px;
-      font-size:.78rem;
     }
     .badge.ok{
       background:rgba(34,197,94,.14);
       border:1px solid rgba(34,197,94,.28);
       color:#86efac;
     }
+    .badge.warn{
+      background:rgba(245,158,11,.14);
+      border:1px solid rgba(245,158,11,.28);
+      color:#fcd34d;
+    }
 
     .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
     .btn{
-      font-family:'Inter',sans-serif;
-      border:none;
-      cursor:pointer;
-      padding:12px 16px;
-      border-radius:12px;
-      transition: transform .15s ease, background .15s ease, border-color .15s ease;
-      font-weight:600;
-      font-size:.95rem;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      min-width: 190px;
+      border:none;cursor:pointer;
+      padding:12px 16px;border-radius:12px;
+      font-weight:700;font-size:.95rem;
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      transition:transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+      min-width: 230px;
+      user-select:none;
     }
     .btn.primary{
-      background:var(--primary);
-      color:#fff;
+      background:var(--primary);color:#fff;
+      box-shadow:0 10px 22px rgba(59,130,246,.18);
     }
     .btn.primary:hover{background:var(--primary2);transform:translateY(-2px)}
     .btn.ghost{
       background:transparent;
-      color:#93c5fd;
       border:1px solid rgba(147,197,253,.38);
+      color:#93c5fd;
     }
     .btn.ghost:hover{background:rgba(147,197,253,.09);transform:translateY(-2px)}
-    .btn.small{min-width:auto;padding:10px 12px;font-size:.9rem}
+    .btn.small{min-width:auto;padding:10px 12px;font-size:.92rem}
 
-    .miniTitle{
-      font-weight:700;
-      margin-bottom:10px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
+    .miniTitle{font-weight:900;margin-bottom:10px;display:flex;align-items:center;gap:8px}
     .miniText{color:var(--muted);line-height:1.6;font-size:.95rem}
     .list{margin-top:14px;display:grid;gap:10px}
     .li{
       display:flex;gap:10px;align-items:flex-start;
-      padding:10px 12px;
-      border-radius:14px;
+      padding:10px 12px;border-radius:14px;
       background:rgba(255,255,255,.05);
       border:1px solid rgba(255,255,255,.10);
     }
     .ico{
-      width:26px;height:26px;border-radius:10px;
+      width:28px;height:28px;border-radius:10px;
       display:flex;align-items:center;justify-content:center;
       background:rgba(255,255,255,.08);
       border:1px solid rgba(255,255,255,.12);
-      flex:0 0 auto;
-      margin-top:1px;
-      font-size:.95rem;
+      flex:0 0 auto;margin-top:1px;
     }
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
-      margin-bottom:18px;
-    }
-    .kpi{
-      padding:18px;
-      border-radius:16px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-    }
-    .kpi b{font-size:1.1rem}
-    .kpi p{color:var(--muted);margin-top:8px;line-height:1.5;font-size:.95rem}
 
     .sectionTitle{
       font-size:1.25rem;
       margin-bottom:10px;
-      font-weight:700;
+      font-weight:900;
       letter-spacing:.2px;
     }
+    .sep{height:1px;background:rgba(255,255,255,.10);margin:14px 0}
+
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+      margin:16px 0;
+    }
+    .kpi{
+      padding:18px;border-radius:16px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .kpi b{font-size:1.05rem}
+    .kpi p{color:var(--muted);margin-top:8px;line-height:1.5;font-size:.95rem}
+
     .two{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:14px;
-      margin-bottom:18px;
+      margin-top:16px;
+      margin-bottom:16px;
     }
 
-    .cta{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      align-items:flex-start;
+    /* Planos */
+    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+    .plan{
+      padding:18px;border-radius:16px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      display:flex;flex-direction:column;gap:12px;
+      position:relative;
     }
-    .cta p{color:var(--muted);line-height:1.6}
+    .plan.popular{
+      border-color: rgba(59,130,246,.45);
+      box-shadow: 0 0 0 1px rgba(59,130,246,.18) inset;
+    }
+    .tag{
+      position:absolute;top:12px;right:12px;
+      font-size:.75rem;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(59,130,246,.18);
+      border:1px solid rgba(59,130,246,.35);
+      color:#93c5fd;
+    }
+    .price{font-size:1.7rem;font-weight:900}
+    .plan ul{list-style:none;display:grid;gap:8px;color:var(--muted);line-height:1.4}
+    .plan li::before{content:"✅ ";color:#86efac}
+    .plan .fine{font-size:.82rem;color:var(--muted2);line-height:1.5}
+
+    /* Portfólio */
+    .portfolio{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+    .shot{
+      padding:14px;border-radius:16px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .shot b{display:block;margin-bottom:6px}
+    .shot span{color:var(--muted);font-size:.9rem;line-height:1.5}
+
+    /* FAQ */
+    details{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      padding:14px;
+    }
+    summary{cursor:pointer;font-weight:800}
+    details p{margin-top:10px;color:var(--muted);line-height:1.6}
+
+    /* Rodapé */
     .footer{
-      margin-top:10px;
-      color:var(--muted2);
-      font-size:.8rem;
-      opacity:.95;
+      margin-top:14px;color:var(--muted2);
+      font-size:.82rem;opacity:.95
     }
-    .sep{height:1px;background:rgba(255,255,255,.10);margin:16px 0}
+    .centerFooter{text-align:center;margin:18px 0 8px}
 
-    @media (max-width: 900px){
+    /* Botão flutuante */
+    .whatsapp-float{
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      width: 56px;
+      height: 56px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      z-index: 9999;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .whatsapp-float:hover{
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+    }
+
+    @media (max-width: 980px){
       .hero{grid-template-columns:1fr}
-      .grid{grid-template-columns:1fr}
-      .two{grid-template-columns:1fr}
-      .btn{min-width: 100%;}
+      .grid3,.plans,.two,.portfolio{grid-template-columns:1fr}
+      .btn{min-width:100%}
+      .topbar{flex-direction:column;align-items:flex-start}
+      .pill{width:100%;text-align:center}
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="topbar">
+    <!-- TOPO -->
+    <header class="topbar">
       <div class="brand">
         <span class="dot"></span>
-        <span>Projeto/Renda — Lucas</span>
+        <span>Sites Profissionais — Lucas</span>
       </div>
-      <span class="pill">GitHub Pages • HTTPS • Site no ar</span>
-    </div>
+      <span class="pill">Criação de sites • Landing pages • HTTPS • Publicação rápida</span>
+    </header>
 
     <!-- HERO -->
     <section class="hero">
       <div class="card">
-        <h1>Transf
+        <h1>Criação de sites profissionais para divulgar seu serviço e gerar <span style="color:#86efac">mais clientes</span>.</h1>
+        <p class="sub">
+          Eu crio sua página do zero, deixo ela bonita, rápida e publico com HTTPS.
+          Você recebe um link pronto para divulgar e vender (com botão direto para WhatsApp).
+        </p>
+
+        <div class="badges">
+          <span class="badge ok">Design moderno</span>
+          <span class="badge ok">Responsivo (celular)</span>
+          <span class="badge">Rápido e leve</span>
+          <span class="badge warn">Foco em conversão</span>
+        </div>
+
+        <div class="actions">
+          <a class="btn primary" href="#"
+             id="ctaHero"
+             target="_blank" rel="noopener">
+            💬 Pedir orçamento no WhatsApp
+          </a>
+          <a class="btn ghost" href="#planos">
+            💼 Ver planos
+          </a>
+        </div>
+
+        <div class="footer">
+          Atendimento direto e simples. Você me manda as informações e eu entrego o site no ar.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="miniTitle">🚀 O que você recebe</div>
+        <p class="miniText">
+          Uma página oficial pronta para divulgar, com estrutura de venda e CTAs claros.
+        </p>
+
+        <div class="list">
+          <div class="li">
+            <div class="ico">⚡</div>
+            <div>
+              <b>Rápido e leve</b>
+              <div class="miniText">Carrega bem no celular (onde a maioria compra).</div>
+            </div>
+          </div>
+          <div class="li">
+            <div class="ico">🔒</div>
+            <div>
+              <b>HTTPS</b>
+              <div class="miniText">Link seguro, mais confiança para o cliente.</div>
+            </div>
+          </div>
+          <div class="li">
+            <div class="ico">💬</div>
+            <div>
+              <b>WhatsApp direto</b>
+              <div class="miniText">Clique e mensagem pronta para fechar mais rápido.</div>
+            </div>
+          </div>
+          <div class="li">
+            <div class="ico">🧩</div>
+            <div>
+              <b>Fácil de escalar</b>
+              <div class="miniText">Dá para adicionar serviços, portfólio e domínio próprio.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFÍCIOS -->
+    <section class="grid3" id="beneficios">
+      <div class="kpi">
+        <b>✅ Mais contatos</b>
+        <p>CTA claro + WhatsApp aumentam a taxa de mensagem e pedidos.</p>
+      </div>
+      <div class="kpi">
+        <b>✅ Mais autoridade</b>
+        <p>Layout moderno transmite profissionalismo e confiança na hora.</p>
+      </div>
+      <div class="kpi">
+        <b>✅ Mais vendas</b>
+        <p>Página feita para conversão: oferta, benefícios e ação.</p>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA + PORTFÓLIO -->
+    <section class="two">
+      <div class="card" id="como-funciona">
+        <div class="sectionTitle">📌 Como funciona (3 passos)</div>
+        <div class="sep"></div>
+        <p class="miniText"><b>1)</b> Você me envia: nome, serviço, cidade, WhatsApp e 2–4 fotos.</p>
+        <p class="miniText"><b>2)</b> Eu monto a página e te mando para revisar.</p>
+        <p class="miniText"><b>3)</b> Eu publico online com HTTPS e te entrego o link pronto.</p>
+
+        <div class="actions" style="margin-top:14px">
+          <a class="btn primary" href="#" id="ctaInfos" target="_blank" rel="noopener">
+            ✅ Enviar minhas infos
+          </a>
+          <a class="btn ghost" href="#faq">
+            ❓ Dúvidas
+          </a>
+        </div>
+
+        <div class="footer">
+          Você pode usar este modelo para vender páginas para outros clientes também.
+        </div>
+      </div>
+
+      <div class="card" id="portfolio">
+        <div class="sectionTitle">📌 Portfólio (exemplos)</div>
+        <div class="sep"></div>
+
+        <div class="portfolio">
+          <div class="shot">
+            <b>Serviço local</b>
+            <span>Ex: manicure, barbeiro, frete, eletricista.</span>
+          </div>
+          <div class="shot">
+            <b>Negócio</b>
+            <span>Ex: estética, consultoria, delivery, loja.</span>
+          </div>
+          <div class="shot">
+            <b>Criador / Digital</b>
+            <span>Ex: produto digital, afiliado, canal, curso.</span>
+          </div>
+        </div>
+
+        <div class="footer">
+          Depois você substitui estes exemplos por trabalhos reais e prints.
+        </div>
+      </div>
+    </section>
+
+    <!-- PLANOS -->
+    <section class="card" id="planos">
+      <div class="sectionTitle">💼 Planos (exemplo — você pode ajustar valores)</div>
+      <div class="sep"></div>
+
+      <div class="plans">
+        <div class="plan">
+          <b>Básico</b>
+          <div class="price">R$ 97</div>
+          <div class="miniText">Para começar rápido e divulgar.</div>
+          <ul>
+            <li>1 landing page</li>
+            <li>Botão WhatsApp</li>
+            <li>Texto e cores simples</li>
+            <li>Publicação com HTTPS</li>
+          </ul>
+          <a class="btn primary" href="#"
+             id="btnBasico"
+             target="_blank" rel="noopener">Quero o Básico</a>
+          <div class="fine">Ideal para: serviços locais e autônomos.</div>
+        </div>
+
+        <div class="plan popular">
+          <span class="tag">Mais vendido</span>
+          <b>Pro</b>
+          <div class="price">R$ 197</div>
+          <div class="miniText">Mais completo e com melhor conversão.</div>
+          <ul>
+            <li>Landing page premium</li>
+            <li>Seções: oferta, benefícios, prova social</li>
+            <li>CTAs estratégicos</li>
+            <li>Publicação com HTTPS</li>
+          </ul>
+          <a class="btn primary" href="#"
+             id="btnPro"
+             target="_blank" rel="noopener">Quero o Pro</a>
+          <div class="fine">Ideal para: quem quer vender mais rápido.</div>
+        </div>
+
+        <div class="plan">
+          <b>Premium</b>
+          <div class="price">R$ 297</div>
+          <div class="miniText">Para quem quer presença forte.</div>
+          <ul>
+            <li>Landing + 1 página extra (sobre/contato)</li>
+            <li>Texto persuasivo (copy)</li>
+            <li>Ajustes visuais extras</li>
+            <li>Publicação com HTTPS</li>
+          </ul>
+          <a class="btn primary" href="#"
+             id="btnPremium"
+             target="_blank" rel="noopener">Quero o Premium</a>
+          <div class="fine">Ideal para: negócio/serviço com mais oferta.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        Quer um domínio tipo <b>meunegocio.com</b>? É opcional (podemos configurar depois).
+      </div>
+    </section>
+
+    <!-- PROVA SOCIAL + CTA FINAL -->
+    <section class="two">
+      <div class="card" id="prova">
+        <div class="sectionTitle">⭐ Prova social (exemplo)</div>
+        <div class="sep"></div>
+        <p class="miniText">“Site ficou profissional e comecei a receber contatos rapidamente.”</p>
+        <p class="miniText">“Atendimento rápido e página bem acima do esperado.”</p>
+        <p class="miniText" style="opacity:.85">— Depoimentos exemplo (você troca pelos reais)</p>
+      </div>
+
+      <div class="card" id="cta-final">
+        <div class="sectionTitle">🎯 Pronto para ter seu site no ar?</div>
+        <div class="sep"></div>
+        <p class="miniText">
+          Me diga seu serviço, cidade e WhatsApp. Eu monto sua página e te entrego com link e HTTPS.
+        </p>
+
+        <div class="actions" style="margin-top:14px">
+          <a class="btn primary" href="#" id="ctaFinal" target="_blank" rel="noopener">
+            ✅ Falar agora no WhatsApp
+          </a>
+          <a class="btn ghost" href="#como-funciona">
+            📌 Ver processo
+          </a>
+        </div>
+
+        <div class="footer">
+          Atendimento direto, sem complicação.
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="card" id="faq">
+      <div class="sectionTitle">❓ Perguntas frequentes</div>
+      <div class="sep"></div>
+
+      <div style="display:grid;gap:10px">
+        <details>
+          <summary>Preciso pagar hospedagem?</summary>
+          <p>Não necessariamente. Posso publicar gratuitamente com HTTPS (GitHub Pages). Domínio próprio é opcional.</p>
+        </details>
+
+        <details>
+          <summary>Quanto tempo leva?</summary>
+          <p>Quando você envia as informações (nome, serviço, fotos e contato), a entrega costuma ser rápida.</p>
+        </details>
+
+        <details>
+          <summary>Posso colocar Instagram, Pix, catálogo e links?</summary>
+          <p>Sim. Coloco botões e links para redes sociais, Pix, cardápio/catálogo e o que você precisar.</p>
+        </details>
+
+        <details>
+          <summary>Posso editar depois?</summary>
+          <p>Sim. A página é simples de atualizar. Você muda textos, preços e botões quando quiser.</p>
+        </details>
+      </div>
+
+      <div class="actions" style="margin-top:14px">
+        <a class="btn primary" href="#" id="ctaFaq" target="_blank" rel="noopener">
+          💬 Tirar dúvidas no WhatsApp
+        </a>
+      </div>
+
+      <div class="footer">
+        © <span id="year"></span> Lucas — Criação de Sites Profissionais • Landing pages prontas para vender
+      </div>
+    </section>
+
+    <div class="footer centerFooter">
+      Feito com HTML/CSS • Publicado com HTTPS • Pronto para divulgar
+    </div>
+  </div>
+
+  <!-- BOTÃO FLUTUANTE WHATSAPP -->
+  <a id="whatsFloat"
+     href="#"
+     class="whatsapp-float"
+     target="_blank"
+     aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 32 32" width="28" height="28" fill="white" aria-hidden="true">
+      <path d="M19.11 17.43c-.27-.14-1.61-.79-1.86-.88-.25-.09-.43-.14-.61.14-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.17-1.35-.8-.71-1.34-1.6-1.5-1.87-.16-.27-.02-.41.12-.55.13-.13.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.61-.47h-.52c-.18 0-.48.07-.73.34-.25.27-.95.93-.95 2.27 0 1.34.98 2.64 1.12 2.82.14.18 1.93 2.95 4.68 4.13.66.28 1.18.45 1.58.58.66.21 1.26.18 1.73.11.53-.08 1.61-.66 1.84-1.3.23-.64.23-1.19.16-1.3-.07-.11-.25-.18-.52-.32z"/>
+      <path d="M16.02 3C9.38 3 4 8.38 4 15.02c0 2.65.87 5.1 2.34 7.08L4 29l7.1-2.29a11.9 11.9 0 0 0 4.92 1.03c6.64 0 12.02-5.38 12.02-12.02C28.04 8.38 22.66 3 16.02 3zm0 21.78c-1.6 0-3.17-.43-4.53-1.24l-.32-.19-4.21 1.36 1.37-4.1-.21-.33a9.77 9.77 0 0 1-1.5-5.26c0-5.4 4.39-9.8 9.8-9.8 5.4 0 9.8 4.39 9.8 9.8 0 5.41-4.39 9.8-9.8 9.8z"/>
+    </svg>
+  </a>
+
+  <script>
+    // ✅ CONFIGURAÇÃO WHATSAPP
+    const WHATS_NUMBER = "5592993092695";
+
+    function wa(msg){
+      return `https://wa.me/${WHATS_NUMBER}?text=${encodeURIComponent(msg)}`;
+    }
+
+    // Links/CTAs (mensagens oficiais)
+    const msgOrcamento = "Oi Lucas! Vi sua página e quero um site/landing page para o meu negócio. Pode me passar os planos e o prazo?";
+    const msgInfos = "Oi Lucas! Quero criar meu site. Meu serviço é: ____ | Minha cidade: ____ | Meu WhatsApp: ____ | Tenho fotos: sim/não";
+    const msgDuvidas = "Oi Lucas! Tenho algumas dúvidas sobre a criação do site. Pode me ajudar?";
+    const msgBasico = "Oi Lucas! Quero o Plano Básico (R$ 97). Pode me confirmar o prazo e o que está incluso?";
+    const msgPro = "Oi Lucas! Quero o Plano Pro (R$ 197). Pode me explicar os detalhes e o prazo?";
+    const msgPremium = "Oi Lucas! Quero o Plano Premium (R$ 297). Quero fechar e saber o prazo.";
+
+    // Set ano no rodapé
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Botão flutuante (padrão: orçamento)
+    document.getElementById("whatsFloat").href = wa(msgOrcamento);
+
+    // CTAs principais
+    document.getElementById("ctaHero").href = wa(msgOrcamento);
+    document.getElementById("ctaFinal").href = wa(msgOrcamento);
+    document.getElementById("ctaFaq").href = wa(msgDuvidas);
+    document.getElementById("ctaInfos").href = wa(msgInfos);
+
+    // Planos (OPÇÃO B: abre WhatsApp direto com mensagem do plano)
+    document.getElementById("btnBasico").href = wa(msgBasico);
+    document.getElementById("btnPro").href = wa(msgPro);
+    document.getElementById("btnPremium").href = wa(msgPremium);
+  </script>
+</body>
+</html>
