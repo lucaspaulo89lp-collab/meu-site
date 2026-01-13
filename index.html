@@ -1,0 +1,124 @@
+index.html
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meu primeiro site</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #e2e8f0;
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 24px;
+    }
+    .card{
+      max-width: 720px;
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+    }
+    h1{
+      margin: 0 0 10px 0;
+      font-size: 34px;
+      letter-spacing: 0.5px;
+    }
+    p{
+      margin: 0 0 18px 0;
+      line-height: 1.6;
+      color: #cbd5e1;
+      font-size: 16px;
+    }
+    .badges{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      margin: 14px 0 22px;
+    }
+    .badge{
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(56,189,248,0.14);
+      border: 1px solid rgba(56,189,248,0.30);
+      color: #7dd3fc;
+    }
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .btn{
+      cursor:pointer;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: transform .08s ease, opacity .08s ease;
+    }
+    .btn:active{ transform: scale(0.98); }
+    .primary{
+      background: #38bdf8;
+      color: #082f49;
+    }
+    .ghost{
+      background: rgba(255,255,255,0.08);
+      color: #e2e8f0;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+    .footer{
+      margin-top: 18px;
+      font-size: 12px;
+      color: rgba(226,232,240,0.7);
+    }
+    code{
+      background: rgba(0,0,0,0.25);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <h1>AGORA SIM! 🚀</h1>
+    <p>
+      Este é meu primeiro site, criado do zero. Agora ele já tem estilo, centralização
+      e um visual moderno.
+    </p>
+
+    <div class="badges">
+      <span class="badge">HTML</span>
+      <span class="badge">CSS</span>
+      <span class="badge">Local: <code>file:///</code></span>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" onclick="alert('Você clicou! Seu site já tem interação 😄')">
+        Testar botão
+      </button>
+
+      <button class="btn ghost" onclick="document.title='Site do Lucas ✅'">
+        Mudar título da aba
+      </button>
+    </div>
+
+    <div class="footer">
+      Dica: sempre que editar, faça <b>Ctrl + S</b> e depois atualize o navegador com <b>F5</b>.
+    </div>
+  </main>
+</body>
+</html>
