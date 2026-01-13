@@ -1,4 +1,4 @@
-games/wallet.js
+
 /* games/wallet.js
    Tiger Coins & Store System (FICTÍCIO / SEM VALOR REAL)
 */
